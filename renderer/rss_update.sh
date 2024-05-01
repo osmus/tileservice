@@ -46,7 +46,7 @@ URL=$(grep -o 'https://[^ ]*' /tmp/seashells_render)
 xmlstarlet ed --inplace \
     -s "//channel" -t elem -n "item" -v "" \
     -s "//channel/item[last()]" -t elem -n "title" -v "$TITLE" \
-    -s "//channel/item[last()]" -t elem -n "author" -v "zelonewolf@gmail.com" \
+    -s "//channel/item[last()]" -t elem -n "author" -v "tech@openstreetmap.us" \
     -s "//channel/item[last()]" -t elem -n "link" -v "$URL" \
     -s "//channel/item[last()]" -t elem -n "pubDate" -v "$CURRENT_DATE" \
     -s "//channel/item[last()]" -t elem -n "content:encoded" -v "$MESSAGE" \
