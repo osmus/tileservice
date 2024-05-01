@@ -1,0 +1,407 @@
+schema_name: OSMUS Trails
+schema_description: A map of trails
+attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
+sources:
+  osm:
+    type: osm
+    local_path: data/sources/planet.osm.pbf
+layers:
+  - id: trail
+    features:
+      - source: osm
+        geometry: line
+        min_zoom: 5
+        include_when:
+          - highway:
+            - bridleway
+            - path
+            - via_ferrata
+          - __all__:
+            # we only care about tracks if they have some trail access tag
+            - highway: track
+            - __any__:
+              atv: __any__
+              bicycle: __any__
+              dog: __any__
+              foot: __any__
+              horse: __any__
+              piste:type: __any__
+              ski:nordic: __any__
+              snowmobile: __any__
+              wheelchair: __any__
+          - __all__:
+            # include any roads or paths that are part of canoe portages 
+            - highway: __any__
+            - portage: __any__
+        exclude_when:
+          indoor: __any__
+          man_made: pier
+          public_transport: platform
+          railway: platform
+        attributes:
+          &trail_attributes
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: atv
+            tag_value: atv
+          - key: bicycle
+            tag_value: bicycle
+          - key: bridge
+            tag_value: bridge
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: foot
+            tag_value: foot
+          - key: ford
+            tag_value: ford
+          - key: highway
+            tag_value: highway
+          - key: hiking
+            tag_value: hiking
+          - key: horse
+            tag_value: horse
+          - key: incline
+            tag_value: incline
+          - key: informal
+            tag_value: informal
+          - key: inline_skates
+            tag_value: inline_skates
+          - key: motor_vehicle
+            tag_value: motor_vehicle
+          - key: mtb
+            tag_value: mtb
+          - key: name
+            tag_value: name
+          - key: oneway
+            tag_value: oneway
+          - key: oneway:bicycle
+            tag_value: oneway:bicycle
+          - key: oneway:foot
+            tag_value: oneway:foot
+          - key: operator
+            tag_value: operator
+          - key: piste:type
+            tag_value: piste:type
+          - key: portage
+            tag_value: portage
+          - key: ramp:bicycle
+            tag_value: ramp:bicycle
+          - key: ramp:wheelchair
+            tag_value: ramp:wheelchair
+          - key: sac_scale
+            tag_value: sac_scale
+          - key: ski:nordic
+            tag_value: ski:nordic
+          - key: smoothness
+            tag_value: smoothness
+          - key: snowmobile
+            tag_value: snowmobile
+          - key: surface
+            tag_value: surface
+          - key: survey:date
+            tag_value: survey:date
+          - key: symbol
+            tag_value: symbol
+          - key: toll
+            tag_value: toll
+          - key: tracktype
+            tag_value: tracktype
+          - key: trail_visibility
+            tag_value: trail_visibility
+          - key: trailblazed
+            tag_value: trailblazed
+          - key: tunnel
+            tag_value: tunnel
+          - key: vehicle
+            tag_value: vehicle
+          - key: wheelchair
+            tag_value: wheelchair
+          - key: width
+            tag_value: width
+      - source: osm
+        geometry: line
+        min_zoom: 5
+        include_when:
+          highway:
+            - footway
+            - steps
+        exclude_when:
+          # ignore sidewalks, crossings, access aisles, etc.
+          footway: __any__
+          indoor: __any__
+          man_made: pier
+          public_transport: platform
+          railway: platform
+        attributes: *trail_attributes
+      - source: osm
+        geometry: line
+        min_zoom: 5
+        include_when:
+          highway: cycleway
+        exclude_when:
+          # ignore bike lanes that are part of roads
+          cycleway:
+            - lane
+            - crossing
+          indoor: __any__
+          man_made: pier
+          public_transport: platform
+          railway: platform
+        attributes: *trail_attributes
+      - source: osm
+        geometry: line
+        min_zoom: 5
+        include_when:
+          __all__:
+            - waterway:
+              - river
+              - stream
+              - tidal_channel
+              - canal
+              - drain
+              - ditch
+              - canoe_pass
+              - fairway
+              - link
+              - flowline
+            - canoe: __any__
+        exclude_when:
+          indoor: __any__
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: boat
+            tag_value: boat
+          - key: bridge
+            tag_value: bridge
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: intermittent
+            tag_value: intermittent
+          - key: oneway:canoe
+            tag_value: oneway:canoe
+          - key: name
+            tag_value: name
+          - key: portage
+            tag_value: portage
+          - key: survey:date
+            tag_value: survey:date
+          - key: tidal
+            tag_value: tidal
+          - key: tunnel
+            tag_value: tunnel
+          - key: waterway
+            tag_value: waterway
+          - key: width
+            tag_value: width
+  - id: trail_poi
+    features:
+      # collect ranger stations mapped as nodes
+      - source: osm
+        geometry: point
+        min_zoom: 5
+        include_when:
+          amenity: ranger_station
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: amenity
+            tag_value: amenity
+          - key: check_date
+            tag_value: check_date
+          - key: fixme
+            tag_value: fixme
+          - key: name
+            tag_value: name
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: survey:date
+            tag_value: survey:date
+          - key: wheelchair
+            tag_value: wheelchair
+      # collect ranger stations mapped as areas
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 5
+        include_when:
+          amenity: ranger_station
+        attributes:
+          # could be an OSM way or relation
+          - key: SRC_GEOM
+            value: "polygon"
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: amenity
+            tag_value: amenity
+          - key: check_date
+            tag_value: check_date
+          - key: fixme
+            tag_value: fixme
+          - key: name
+            tag_value: name
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: survey:date
+            tag_value: survey:date
+          - key: wheelchair
+            tag_value: wheelchair
+      - source: osm
+        geometry: point
+        min_zoom: 7
+        include_when:
+          highway: trailhead
+        exclude_when:
+          amenity: ranger_station
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: atv
+            tag_value: atv
+          - key: bicycle
+            tag_value: bicycle
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: foot
+            tag_value: foot
+          - key: highway
+            tag_value: highway
+          - key: hiking
+            tag_value: hiking
+          - key: horse
+            tag_value: horse
+          - key: informal
+            tag_value: informal
+          - key: mtb
+            tag_value: mtb
+          - key: name
+            tag_value: name
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: ski:nordic
+            tag_value: ski:nordic
+          - key: snowmobile
+            tag_value: snowmobile
+          - key: survey:date
+            tag_value: survey:date
+          - key: wheelchair
+            tag_value: wheelchair
+      # `canoe=put_in` is like `highway=trailhead` for water trails
+      - source: osm
+        geometry: point
+        min_zoom: 7
+        include_when:
+          canoe: put_in
+        exclude_when:
+          amenity: ranger_station
+          highway: trailhead
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: access
+            tag_value: access
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: informal
+            tag_value: informal
+          - key: name
+            tag_value: name
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: survey:date
+            tag_value: survey:date
+          - key: wheelchair
+            tag_value: wheelchair
+      - source: osm
+        geometry: point
+        # route markers are abundant so restrict to higher zooms
+        min_zoom: 12
+        include_when:
+          information:
+            - route_marker
+            - guidepost
+        exclude_when:
+          amenity: ranger_station
+          canoe: put_in
+          highway: trailhead
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: atv
+            tag_value: atv
+          - key: bicycle
+            tag_value: bicycle
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: foot
+            tag_value: foot
+          - key: hiking
+            tag_value: hiking
+          - key: horse
+            tag_value: horse
+          - key: information
+            tag_value: information
+          - key: mtb
+            tag_value: mtb
+          - key: name
+            tag_value: name
+          - key: operator
+            tag_value: operator
+          - key: ski:nordic
+            tag_value: ski:nordic
+          - key: snowmobile
+            tag_value: snowmobile
+          - key: survey:date
+            tag_value: survey:date
+          - key: wheelchair
+            tag_value: wheelchair
+args:
+  area:
+    description: Geofabrik area to download
+    default: rhode-island
+
