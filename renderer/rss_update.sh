@@ -31,7 +31,7 @@ if [ ! -f "$RSS_FILE" ]; then
     echo '<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
-    <author><name>Brian Sperlongano</name></author>
+    <author><name>OpenStreetMap US</name></author>
     <title type="text">tile.ourmap.us Planet Build</title>
     <link>https://tile.ourmap.us/</link>
     <description>Planet build status</description>
