@@ -1,2 +1,2 @@
-# tileserver
-Central repo for OSM US vector tile services
+# osmus/tileservice
+Central repo for the OSM US vector tile service
