@@ -12,7 +12,6 @@ echo "Start Render: $DATE"
 
 mkdir -p "$DIR/data/sources"
 mkdir -p "$DIR/data/tmp"
-mkdir -p "$DIR/data/layers"
 
 rm -rf "$DIR/data/sources/tmp*.osm.pbf"
 
@@ -24,7 +23,9 @@ docker system prune --force
 # Make sure we have the latest planetiler
 docker pull ghcr.io/onthegomap/planetiler:latest
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' -v "$DIR/data":/data \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+  -v "$DIR/data":/data \
+  -v "$DIR/layers":/layers \
   ghcr.io/onthegomap/planetiler:latest --area=planet \
   --download --download-only --only-fetch-wikidata
 
@@ -33,7 +34,9 @@ rm -rf "$DIR/data/sources/monaco.osm.pbf"
 
 PLANET="$DIR/data/planet.pmtiles"
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' -v "$DIR/data":/data \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
+    -v "$DIR/data":/data \
+    -v "$DIR/layers":/layers \
     ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
     --output="/data/planet.pmtiles" \
     --transportation_name_size_for_shield \
@@ -57,17 +60,19 @@ echo 'Uploading planet to s3 bucket'
 aws s3 cp "$PLANET" s3://planet-pmtiles/ --only-show-errors
 
 # Render optional layers
-for file in "$DIR/data/layers/"*.yml; do
+for file in "$DIR/layers/"*.yml; do
     # Get the base name of the file without the .yml extension
     layer_name=$(basename "$file" .yml)
 
     echo "Processing layer: $layer_name"
 
-    docker run -e JAVA_TOOL_OPTIONS='-Xmx24g' -v "$DIR/data":/data \
+    docker run -e JAVA_TOOL_OPTIONS='-Xmx24g' \
+        -v "$DIR/data":/data \
+        -v "$DIR/layers":/layers \
         ghcr.io/onthegomap/planetiler:latest generate-custom \
         --area=planet --bounds=world \
         --output="/data/$layer_name.pmtiles" \
-        --schema="/data/layers/$layer_name.yml" \
+        --schema="/layers/$layer_name.yml" \
         --storage=mmap --nodemap-type=array \
         --max-point-buffer=4
 
