@@ -66,6 +66,8 @@ layers:
             tag_value: foot
           - key: ford
             tag_value: ford
+          - key: hand_cart
+            tag_value: hand_cart
           - key: highway
             tag_value: highway
           - key: hiking
@@ -214,10 +216,20 @@ layers:
             tag_value: noname
           - key: portage
             tag_value: portage
+          - key: sailboat
+            tag_value: sailboat
+          - key: motorboat
+            tag_value: motorboat
+          - key: sea_kayak
+            tag_value: sea_kayak
+          - key: ship
+            tag_value: ship
           - key: survey:date
             tag_value: survey:date
           - key: tidal
             tag_value: tidal
+          - key: rapids
+            tag_value: rapids
           - key: tunnel
             tag_value: tunnel
           - key: waterway
