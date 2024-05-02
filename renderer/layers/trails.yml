@@ -241,7 +241,7 @@ layers:
       # collect ranger stations mapped as nodes
       - source: osm
         geometry: point
-        min_zoom: 5
+        min_zoom: 7
         include_when:
           amenity: ranger_station
         attributes:
@@ -276,7 +276,7 @@ layers:
       # collect ranger stations mapped as areas
       - source: osm
         geometry: polygon_centroid_if_convex
-        min_zoom: 5
+        min_zoom: 7
         include_when:
           amenity: ranger_station
         attributes:
