@@ -56,6 +56,12 @@ layers:
             tag_value: dog
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: foot
             tag_value: foot
           - key: ford
@@ -78,6 +84,8 @@ layers:
             tag_value: mtb
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: oneway
             tag_value: oneway
           - key: oneway:bicycle
@@ -190,12 +198,20 @@ layers:
             tag_value: dog
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: intermittent
             tag_value: intermittent
           - key: oneway:canoe
             tag_value: oneway:canoe
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: portage
             tag_value: portage
           - key: survey:date
@@ -227,8 +243,16 @@ layers:
             tag_value: check_date
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: opening_hours
             tag_value: opening_hours
           - key: operator
@@ -257,8 +281,16 @@ layers:
             tag_value: check_date
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: opening_hours
             tag_value: opening_hours
           - key: operator
@@ -291,6 +323,12 @@ layers:
             tag_value: dog
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: foot
             tag_value: foot
           - key: highway
@@ -305,6 +343,8 @@ layers:
             tag_value: mtb
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: opening_hours
             tag_value: opening_hours
           - key: operator
@@ -339,10 +379,18 @@ layers:
             tag_value: dog
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: informal
             tag_value: informal
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: opening_hours
             tag_value: opening_hours
           - key: operator
@@ -378,6 +426,12 @@ layers:
             tag_value: dog
           - key: fixme
             tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: foot
             tag_value: foot
           - key: hiking
@@ -390,6 +444,8 @@ layers:
             tag_value: mtb
           - key: name
             tag_value: name
+          - key: noname
+            tag_value: noname
           - key: operator
             tag_value: operator
           - key: ski:nordic
