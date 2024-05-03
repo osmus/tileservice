@@ -6,7 +6,7 @@
 # Get the directory of the current script
 DIR="$(dirname "$0")"
 
-DEFAULT_WORKING_DIR="/var/lib/tile_renderer"
+DEFAULT_WORKING_DIR="/var/lib/render"
 
 WORKING_DIR="${1:-$DEFAULT_WORKING_DIR}"
 
