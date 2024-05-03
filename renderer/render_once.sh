@@ -7,15 +7,17 @@ set -x
 # Get the directory of the current script
 DIR="$(dirname "$0")"
 
+WORKING_DIR="${1:-$DIR}"
+
 DATE="$(date -u '+%Y-%m-%d %H:%M:%S')"
 echo "Start Render: $DATE"
 
-mkdir -p "$DIR/data/sources"
-mkdir -p "$DIR/data/tmp"
+mkdir -p "$WORKING_DIR/data/sources"
+mkdir -p "$WORKING_DIR/data/tmp"
 
-rm -rf "$DIR/data/sources/tmp*.osm.pbf"
+rm -rf "$WORKING_DIR/data/sources/tmp*.osm.pbf"
 
-pyosmium-up-to-date -vvvv --size 10000 "$DIR/data/sources/planet.osm.pbf"
+pyosmium-up-to-date -vvvv --size 10000 "$WORKING_DIR/data/sources/planet.osm.pbf"
 
 # Remove excess docker files from past runs
 docker system prune --force
@@ -24,18 +26,18 @@ docker system prune --force
 docker pull ghcr.io/onthegomap/planetiler:latest
 
 docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
-  -v "$DIR/data":/data \
+  -v "$WORKING_DIR/data":/data \
   -v "$DIR/layers":/layers \
   ghcr.io/onthegomap/planetiler:latest --area=planet \
   --download --download-only --only-fetch-wikidata
 
 # Remove default downloaded OSM file
-rm -rf "$DIR/data/sources/monaco.osm.pbf"
+rm -rf "$WORKING_DIR/data/sources/monaco.osm.pbf"
 
-PLANET="$DIR/data/planet.pmtiles"
+PLANET="$WORKING_DIR/data/planet.pmtiles"
 
 docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
-    -v "$DIR/data":/data \
+    -v "$WORKING_DIR/data":/data \
     -v "$DIR/layers":/layers \
     ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
     --output="/data/planet.pmtiles" \
@@ -67,7 +69,7 @@ for file in "$DIR/layers/"*.yml; do
     echo "Processing layer: $layer_name"
 
     docker run -e JAVA_TOOL_OPTIONS='-Xmx24g' \
-        -v "$DIR/data":/data \
+        -v "$WORKING_DIR/data":/data \
         -v "$DIR/layers":/layers \
         ghcr.io/onthegomap/planetiler:latest generate-custom \
         --area=planet --bounds=world \
@@ -77,7 +79,7 @@ for file in "$DIR/layers/"*.yml; do
         --max-point-buffer=4
 
     echo 'Uploading $layer_name to s3 bucket'
-    aws s3 cp "$DIR/data/$layer_name.pmtiles" s3://planet-pmtiles/ --only-show-errors
+    aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://planet-pmtiles/ --only-show-errors
 done
 
 echo 'Invalidating the CDN cache'

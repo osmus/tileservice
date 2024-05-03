@@ -1,19 +1,16 @@
 #!/usr/bin/env bash
 
-# Define the lock file
-LOCKFILE="/tmp/planet-render.lock"
+# This script does not check to see if a render is already running.
+# See _example.sh for usage advice.
 
-# Check if lock file exists
-if [ -e "${LOCKFILE}" ]; then
-  echo "A rendering process is already running."
-  exit 1
-else
-  # Create a lock file
-  touch "${LOCKFILE}"
+# Get the directory of the current script
+DIR="$(dirname "$0")"
 
-  # Ensure the lock file is removed when we exit and when we receive signals
-  trap "rm -f ${LOCKFILE}; trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
-fi
+DEFAULT_WORKING_DIR="/var/lib/tile_renderer"
+
+WORKING_DIR="${1:-$DEFAULT_WORKING_DIR}"
+
+mkdir -p "$WORKING_DIR"
 
 mkdir -p /var/log/render
 LOG_TIMESTAMP=$(date +%Y%m%d%H%M%S)
@@ -22,24 +19,21 @@ LOG_FILE="/var/log/render/logs_$LOG_TIMESTAMP.txt"
 touch "$LOG_FILE"
 tail -f "$LOG_FILE" | nc seashells.io 1337 > /tmp/seashells_render & sleep 10
 
-# Get the directory of the current script
-DIR="$(dirname "$0")"
-
 # Get the size of the file in bytes
-OSM_PLANET_SIZE=$(stat -c%s "$DIR/data/sources/planet.osm.pbf")
+OSM_PLANET_SIZE=$(stat -c%s "$WORKING_DIR/data/sources/planet.osm.pbf")
 
 # Print the size with comma separators
 OSM_PLANET_SIZE=$(printf "%'d" $OSM_PLANET_SIZE)
 
-RSS_FILE="$DIR/rss.xml"
-PLANET="$DIR/data/planet.pmtiles"
+RSS_FILE="$WORKING_DIR/rss.xml"
+PLANET="$WORKING_DIR/data/planet.pmtiles"
 
 "$DIR/rss_update.sh" "$RSS_FILE" "Build Started." "The OSM planet file is ${OSM_PLANET_SIZE} bytes."
 
 run() {
   TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
   START_TIME=$(date +%s)
-  "$DIR/render_once.sh"
+  "$DIR/render_once.sh" "$WORKING_DIR"
 
   # Check the exit status of render_once.sh
   if [ $? -eq 0 ]; then
