@@ -42,6 +42,8 @@ layers:
           &trail_attributes
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -207,6 +209,8 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -276,6 +280,8 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -318,10 +324,10 @@ layers:
           amenity: ranger_station
         attributes:
           # could be an OSM way or relation
-          - key: SRC_GEOM
-            value: "polygon"
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -366,6 +372,8 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -434,6 +442,8 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
@@ -487,6 +497,8 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
           - key: OSM_VERSION
             value: "${feature.osm_version}"
           - key: OSM_TIMESTAMP
