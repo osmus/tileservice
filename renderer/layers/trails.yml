@@ -68,10 +68,6 @@ layers:
             tag_value: fixme
           - key: FIXME
             tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
           - key: foot
             tag_value: foot
           - key: ford
@@ -128,6 +124,10 @@ layers:
             tag_value: survey:date
           - key: symbol
             tag_value: symbol
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: toll
             tag_value: toll
           - key: tracktype
@@ -235,24 +235,22 @@ layers:
             tag_value: fixme
           - key: FIXME
             tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
           - key: intermittent
             tag_value: intermittent
-          - key: oneway:canoe
-            tag_value: oneway:canoe
           - key: name
             tag_value: name
           - key: noname
             tag_value: noname
+          - key: oneway:canoe
+            tag_value: oneway:canoe
           - key: portage
             tag_value: portage
-          - key: sailboat
-            tag_value: sailboat
           - key: motorboat
             tag_value: motorboat
+          - key: rapids
+            tag_value: rapids
+          - key: sailboat
+            tag_value: sailboat
           - key: sea_kayak
             tag_value: sea_kayak
           - key: ship
@@ -261,8 +259,10 @@ layers:
             tag_value: survey:date
           - key: tidal
             tag_value: tidal
-          - key: rapids
-            tag_value: rapids
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: tunnel
             tag_value: tunnel
           - key: waterway
@@ -312,10 +312,6 @@ layers:
             tag_value: fixme
           - key: FIXME
             tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
           - key: foot
             tag_value: foot
           - key: highway
@@ -346,6 +342,10 @@ layers:
             tag_value: snowmobile
           - key: survey:date
             tag_value: survey:date
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
           - key: trailer
             tag_value: trailer
           - key: wheelchair
