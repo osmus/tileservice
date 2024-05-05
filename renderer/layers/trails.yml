@@ -42,6 +42,14 @@ layers:
           &trail_attributes
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: atv
@@ -186,6 +194,14 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: boat
@@ -247,6 +263,14 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: amenity
@@ -285,6 +309,14 @@ layers:
             value: "polygon"
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: amenity
@@ -321,6 +353,14 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: atv
@@ -381,6 +421,14 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
           - key: canoe
@@ -426,6 +474,14 @@ layers:
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
+          - key: OSM_VERSION
+             value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+             value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+             value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+             value: "${feature.osm_user_name}"
           - key: atv
             tag_value: atv
           - key: bicycle
