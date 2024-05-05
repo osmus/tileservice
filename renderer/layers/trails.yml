@@ -271,13 +271,15 @@ layers:
             tag_value: width
   - id: trail_poi
     features:
-      # collect ranger stations and trailheads mapped as nodes
+      # collect ranger stations, trailheads, and put-ins mapped as nodes
       - source: osm
         geometry: point
         min_zoom: 7
         include_when:
           amenity: ranger_station
+          canoe: put_in
           highway: trailhead
+          leisure: slipway
         attributes:
           &trail_poi_attributes
           - key: OSM_ID
@@ -324,6 +326,8 @@ layers:
             tag_value: horse
           - key: informal
             tag_value: informal
+          - key: leisure
+            tag_value: leisure
           - key: mtb
             tag_value: mtb
           - key: name
@@ -340,6 +344,8 @@ layers:
             tag_value: snowmobile
           - key: survey:date
             tag_value: survey:date
+          - key: trailer
+            tag_value: trailer
           - key: wheelchair
             tag_value: wheelchair
       # collect ranger stations mapped as areas
@@ -349,58 +355,6 @@ layers:
         include_when:
           amenity: ranger_station
         attributes: *trail_poi_attributes
-      # `canoe=put_in` is like `highway=trailhead` for water trails
-      - source: osm
-        geometry: point
-        min_zoom: 7
-        include_when:
-          canoe: put_in
-        exclude_when:
-          amenity: ranger_station
-          highway: trailhead
-        attributes:
-          - key: OSM_ID
-            value: "${feature.id}"
-          - key: OSM_TYPE
-            value: "${feature.osm_type}"
-          - key: OSM_VERSION
-            value: "${feature.osm_version}"
-          - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
-          - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
-          - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
-          - key: access
-            tag_value: access
-          - key: canoe
-            tag_value: canoe
-          - key: check_date
-            tag_value: check_date
-          - key: dog
-            tag_value: dog
-          - key: fixme
-            tag_value: fixme
-          - key: FIXME
-            tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
-          - key: informal
-            tag_value: informal
-          - key: name
-            tag_value: name
-          - key: noname
-            tag_value: noname
-          - key: opening_hours
-            tag_value: opening_hours
-          - key: operator
-            tag_value: operator
-          - key: survey:date
-            tag_value: survey:date
-          - key: wheelchair
-            tag_value: wheelchair
       - source: osm
         geometry: point
         # route markers are abundant so restrict to higher zooms
