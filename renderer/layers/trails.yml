@@ -29,15 +29,15 @@ layers:
               ski:nordic: __any__
               snowmobile: __any__
               wheelchair: __any__
-          - __all__:
-            # include any roads or paths that are part of canoe portages 
-            - highway: __any__
-            - portage: __any__
         exclude_when:
+          # exclude anything indoors
           indoor: __any__
+          # exclude common combinations that probably aren't trails
           man_made: pier
           public_transport: platform
           railway: platform
+          # exclude any roads or paths explicitly marked as not a trail
+          trail: no
         attributes:
           &trail_attributes
           - key: OSM_ID
@@ -156,6 +156,7 @@ layers:
           man_made: pier
           public_transport: platform
           railway: platform
+          trail: no
         attributes: *trail_attributes
       - source: osm
         geometry: line
@@ -171,6 +172,18 @@ layers:
           man_made: pier
           public_transport: platform
           railway: platform
+          trail: no
+        attributes: *trail_attributes
+      # gather any other roads or paths that are explicitly marked as trails or portages
+      - source: osm
+        geometry: line
+        min_zoom: 5
+        include_when:
+          __all__:
+            - highway: __any__
+            - __any__:
+              portage: __any__
+              trail: yes
         attributes: *trail_attributes
       - source: osm
         geometry: line
