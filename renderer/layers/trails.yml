@@ -263,6 +263,8 @@ layers:
             tag_value: TODO
           - key: tunnel
             tag_value: tunnel
+          - key: waterbody:name
+            tag_value: waterbody:name
           - key: waterway
             tag_value: waterway
           - key: width
