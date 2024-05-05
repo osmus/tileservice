@@ -167,9 +167,7 @@ layers:
           highway: cycleway
         exclude_when:
           # ignore bike lanes that are part of roads
-          cycleway:
-            - lane
-            - crossing
+          cycleway: lane
           indoor: __any__
           man_made: pier
           public_transport: platform
