@@ -278,6 +278,7 @@ layers:
         include_when:
           amenity: ranger_station
         attributes:
+          &ranger_station_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -322,46 +323,7 @@ layers:
         min_zoom: 7
         include_when:
           amenity: ranger_station
-        attributes:
-          # could be an OSM way or relation
-          - key: OSM_ID
-            value: "${feature.id}"
-          - key: OSM_TYPE
-            value: "${feature.osm_type}"
-          - key: OSM_VERSION
-            value: "${feature.osm_version}"
-          - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
-          - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
-          - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
-          - key: access
-            tag_value: access
-          - key: amenity
-            tag_value: amenity
-          - key: check_date
-            tag_value: check_date
-          - key: fixme
-            tag_value: fixme
-          - key: FIXME
-            tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
-          - key: name
-            tag_value: name
-          - key: noname
-            tag_value: noname
-          - key: opening_hours
-            tag_value: opening_hours
-          - key: operator
-            tag_value: operator
-          - key: survey:date
-            tag_value: survey:date
-          - key: wheelchair
-            tag_value: wheelchair
+        attributes: *ranger_station_attributes
       - source: osm
         geometry: point
         min_zoom: 7
