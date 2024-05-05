@@ -271,14 +271,15 @@ layers:
             tag_value: width
   - id: trail_poi
     features:
-      # collect ranger stations mapped as nodes
+      # collect ranger stations and trailheads mapped as nodes
       - source: osm
         geometry: point
         min_zoom: 7
         include_when:
           amenity: ranger_station
+          highway: trailhead
         attributes:
-          &ranger_station_attributes
+          &trail_poi_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -295,57 +296,6 @@ layers:
             tag_value: access
           - key: amenity
             tag_value: amenity
-          - key: check_date
-            tag_value: check_date
-          - key: fixme
-            tag_value: fixme
-          - key: FIXME
-            tag_value: FIXME
-          - key: todo
-            tag_value: todo
-          - key: TODO
-            tag_value: TODO
-          - key: name
-            tag_value: name
-          - key: noname
-            tag_value: noname
-          - key: opening_hours
-            tag_value: opening_hours
-          - key: operator
-            tag_value: operator
-          - key: survey:date
-            tag_value: survey:date
-          - key: wheelchair
-            tag_value: wheelchair
-      # collect ranger stations mapped as areas
-      - source: osm
-        geometry: polygon_centroid_if_convex
-        min_zoom: 7
-        include_when:
-          amenity: ranger_station
-        attributes: *ranger_station_attributes
-      - source: osm
-        geometry: point
-        min_zoom: 7
-        include_when:
-          highway: trailhead
-        exclude_when:
-          amenity: ranger_station
-        attributes:
-          - key: OSM_ID
-            value: "${feature.id}"
-          - key: OSM_TYPE
-            value: "${feature.osm_type}"
-          - key: OSM_VERSION
-            value: "${feature.osm_version}"
-          - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
-          - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
-          - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
-          - key: access
-            tag_value: access
           - key: atv
             tag_value: atv
           - key: bicycle
@@ -392,6 +342,13 @@ layers:
             tag_value: survey:date
           - key: wheelchair
             tag_value: wheelchair
+      # collect ranger stations mapped as areas
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 7
+        include_when:
+          amenity: ranger_station
+        attributes: *trail_poi_attributes
       # `canoe=put_in` is like `highway=trailhead` for water trails
       - source: osm
         geometry: point
