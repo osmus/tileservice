@@ -104,8 +104,14 @@ layers:
             tag_value: oneway:foot
           - key: oneway:horse
             tag_value: oneway:horse
+          - key: oneway:motor_vehicle
+            tag_value: oneway:motor_vehicle
           - key: oneway:mtb
             tag_value: oneway:mtb
+          - key: oneway:portage
+            tag_value: oneway:portage
+          - key: oneway:vehicle
+            tag_value: oneway:vehicle
           - key: oneway:wheelchair
             tag_value: oneway:wheelchair
           - key: operator
@@ -251,6 +257,8 @@ layers:
             tag_value: oneway:boat
           - key: oneway:canoe
             tag_value: oneway:canoe
+          - key: oneway:portage
+            tag_value: oneway:portage
           - key: portage
             tag_value: portage
           - key: motorboat
