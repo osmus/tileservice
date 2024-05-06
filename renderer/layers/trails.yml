@@ -96,10 +96,18 @@ layers:
             tag_value: noname
           - key: oneway
             tag_value: oneway
+          - key: oneway:atv
+            tag_value: oneway:atv
           - key: oneway:bicycle
             tag_value: oneway:bicycle
           - key: oneway:foot
             tag_value: oneway:foot
+          - key: oneway:horse
+            tag_value: oneway:horse
+          - key: oneway:mtb
+            tag_value: oneway:mtb
+          - key: oneway:wheelchair
+            tag_value: oneway:wheelchair
           - key: operator
             tag_value: operator
           - key: piste:type
@@ -239,6 +247,8 @@ layers:
             tag_value: name
           - key: noname
             tag_value: noname
+          - key: oneway:boat
+            tag_value: oneway:boat
           - key: oneway:canoe
             tag_value: oneway:canoe
           - key: portage
