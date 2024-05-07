@@ -249,6 +249,8 @@ layers:
             tag_value: FIXME
           - key: intermittent
             tag_value: intermittent
+          - key: lock
+            tag_value: lock
           - key: name
             tag_value: name
           - key: noname
