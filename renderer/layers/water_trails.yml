@@ -1,45 +1,22 @@
-schema_name: OSM US Trails
-schema_description: A map of trails
+schema_name: OSM US Water Trails
+schema_description: Canoe and kayak waterways and portages.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
     type: osm
     local_path: data/sources/planet.osm.pbf
 layers:
-  - id: trail
+  - id: water_trail
     features:
+      # gather any other roads or paths that are explicitly marked as portages
       - source: osm
         geometry: line
         min_zoom: 5
         include_when:
-          - highway:
-            - bridleway
-            - path
-            - via_ferrata
-          - __all__:
-            # we only care about tracks if they have some trail access tag
-            - highway: track
-            - __any__:
-              atv: __any__
-              bicycle: __any__
-              dog: __any__
-              foot: __any__
-              horse: __any__
-              piste:type: __any__
-              ski:nordic: __any__
-              snowmobile: __any__
-              wheelchair: __any__
-        exclude_when:
-          # exclude anything indoors
-          indoor: __any__
-          # exclude common combinations that probably aren't trails
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          # exclude any roads or paths explicitly marked as not a trail
-          trail: no
+          __all__:
+            - highway: __any__
+            - portage: __any__
         attributes:
-          &trail_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -162,52 +139,22 @@ layers:
         geometry: line
         min_zoom: 5
         include_when:
-          highway:
-            - footway
-            - steps
-        exclude_when:
-          # ignore sidewalks, crossings, access aisles, etc.
-          footway: __any__
-          indoor: __any__
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          trail: no
-        attributes: *trail_attributes
-      - source: osm
-        geometry: line
-        min_zoom: 5
-        include_when:
-          highway: cycleway
-        exclude_when:
-          # ignore bike lanes that are part of roads
-          cycleway: lane
-          indoor: __any__
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          trail: no
-        attributes: *trail_attributes
-      # gather any other roads or paths that are explicitly marked as trails
-      - source: osm
-        geometry: line
-        min_zoom: 5
-        include_when:
           __all__:
-            - highway: __any__
-            - trail: yes
-        attributes: *trail_attributes
-  - id: trail_poi
-    features:
-      # collect ranger stations, trailheads, and put-ins mapped as nodes
-      - source: osm
-        geometry: point
-        min_zoom: 7
-        include_when:
-          amenity: ranger_station
-          highway: trailhead
+            - waterway:
+              - river
+              - stream
+              - tidal_channel
+              - canal
+              - drain
+              - ditch
+              - canoe_pass
+              - fairway
+              - link
+              - flowline
+            - canoe: __any__
+        exclude_when:
+          indoor: __any__
         attributes:
-          &trail_poi_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -222,12 +169,10 @@ layers:
             value: "${feature.osm_user_name}"
           - key: access
             tag_value: access
-          - key: amenity
-            tag_value: amenity
-          - key: atv
-            tag_value: atv
-          - key: bicycle
-            tag_value: bicycle
+          - key: boat
+            tag_value: boat
+          - key: bridge
+            tag_value: bridge
           - key: canoe
             tag_value: canoe
           - key: check_date
@@ -238,60 +183,48 @@ layers:
             tag_value: fixme
           - key: FIXME
             tag_value: FIXME
-          - key: foot
-            tag_value: foot
-          - key: highway
-            tag_value: highway
-          - key: hiking
-            tag_value: hiking
-          - key: horse
-            tag_value: horse
-          - key: informal
-            tag_value: informal
-          - key: information
-            tag_value: information
-          - key: leisure
-            tag_value: leisure
-          - key: mtb
-            tag_value: mtb
+          - key: intermittent
+            tag_value: intermittent
+          - key: lock
+            tag_value: lock
           - key: name
             tag_value: name
           - key: noname
             tag_value: noname
-          - key: opening_hours
-            tag_value: opening_hours
-          - key: operator
-            tag_value: operator
-          - key: ski:nordic
-            tag_value: ski:nordic
-          - key: snowmobile
-            tag_value: snowmobile
+          - key: oneway:boat
+            tag_value: oneway:boat
+          - key: oneway:canoe
+            tag_value: oneway:canoe
+          - key: oneway:portage
+            tag_value: oneway:portage
+          - key: portage
+            tag_value: portage
+          - key: motorboat
+            tag_value: motorboat
+          - key: rapids
+            tag_value: rapids
+          - key: sailboat
+            tag_value: sailboat
+          - key: sea_kayak
+            tag_value: sea_kayak
+          - key: ship
+            tag_value: ship
           - key: survey:date
             tag_value: survey:date
+          - key: tidal
+            tag_value: tidal
           - key: todo
             tag_value: todo
           - key: TODO
             tag_value: TODO
-          - key: trailer
-            tag_value: trailer
-          - key: wheelchair
-            tag_value: wheelchair
-      # collect ranger stations mapped as areas
-      - source: osm
-        geometry: polygon_centroid_if_convex
-        min_zoom: 7
-        include_when:
-          amenity: ranger_station
-        attributes: *trail_poi_attributes
-      - source: osm
-        geometry: point
-        # route markers are abundant so restrict to higher zooms
-        min_zoom: 12
-        include_when:
-          information:
-            - route_marker
-            - guidepost
-        attributes: *trail_poi_attributes
+          - key: tunnel
+            tag_value: tunnel
+          - key: waterbody:name
+            tag_value: waterbody:name
+          - key: waterway
+            tag_value: waterway
+          - key: width
+            tag_value: width
 args:
   area:
     description: Geofabrik area to download

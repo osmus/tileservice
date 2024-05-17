@@ -1,0 +1,97 @@
+schema_name: OSM US Water Trail POIs
+schema_description: Slipways, access points, dams, weirs, and waterfalls. 
+attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
+sources:
+  osm:
+    type: osm
+    local_path: data/sources/planet.osm.pbf
+layers:
+  - id: water_trail_poi
+    features:
+      - source: osm
+        geometry: point
+        min_zoom: 7
+        include_when:
+          canoe: put_in
+          leisure: slipway
+          waterway:
+            - access_point
+            - dam
+            - waterfall
+            - weir
+        attributes:
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
+          - key: OSM_VERSION
+            value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+            value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+            value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+            value: "${feature.osm_user_name}"
+          - key: access
+            tag_value: access
+          - key: amenity
+            tag_value: amenity
+          - key: atv
+            tag_value: atv
+          - key: bicycle
+            tag_value: bicycle
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: fixme
+            tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: foot
+            tag_value: foot
+          - key: highway
+            tag_value: highway
+          - key: hiking
+            tag_value: hiking
+          - key: horse
+            tag_value: horse
+          - key: informal
+            tag_value: informal
+          - key: information
+            tag_value: information
+          - key: leisure
+            tag_value: leisure
+          - key: mtb
+            tag_value: mtb
+          - key: name
+            tag_value: name
+          - key: noname
+            tag_value: noname
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: ski:nordic
+            tag_value: ski:nordic
+          - key: snowmobile
+            tag_value: snowmobile
+          - key: survey:date
+            tag_value: survey:date
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
+          - key: trailer
+            tag_value: trailer
+          - key: waterway
+            tag_value: waterway
+          - key: wheelchair
+            tag_value: wheelchair
+args:
+  area:
+    description: Geofabrik area to download
+    default: rhode-island
+
