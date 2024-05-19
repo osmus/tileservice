@@ -10,16 +10,13 @@ layers:
     features:
       - source: osm
         geometry: point
-        min_zoom: 7
+        min_zoom: 8
         include_when:
           canoe: put_in
           leisure: slipway
-          waterway:
-            - access_point
-            - dam
-            - waterfall
-            - weir
+          waterway: access_point
         attributes:
+          &poi_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -90,6 +87,15 @@ layers:
             tag_value: waterway
           - key: wheelchair
             tag_value: wheelchair
+      - source: osm
+        geometry: point
+        min_zoom: 10
+        include_when:
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
 args:
   area:
     description: Geofabrik area to download
