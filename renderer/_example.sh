@@ -19,7 +19,7 @@ else
   touch "${LOCKFILE}"
 
   # Ensure the lock file is removed when we exit and when we receive signals
-  trap "rm -f ${LOCKFILE}; trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+  trap "rm -f '${LOCKFILE}'; trap - SIGTERM && kill -- -'$$'" SIGINT SIGTERM EXIT
 fi
 
 # The local path to the tileservice repo

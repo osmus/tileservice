@@ -3,4 +3,4 @@
 # Get the directory of the current script
 DIR="$(dirname "$0")"
 
-"$DIR/render_seashells.sh" $1
+"$DIR/render_seashells.sh" "$1"

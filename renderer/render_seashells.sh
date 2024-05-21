@@ -23,7 +23,7 @@ tail -f "$LOG_FILE" | nc seashells.io 1337 > /tmp/seashells_render & sleep 10
 OSM_PLANET_SIZE=$(stat -c%s "$WORKING_DIR/data/sources/planet.osm.pbf")
 
 # Print the size with comma separators
-OSM_PLANET_SIZE=$(printf "%'d" $OSM_PLANET_SIZE)
+OSM_PLANET_SIZE=$(printf "%'d" "$OSM_PLANET_SIZE")
 
 RSS_FILE="$WORKING_DIR/rss.xml"
 PLANET="$WORKING_DIR/data/planet.pmtiles"
@@ -61,7 +61,7 @@ run() {
     PMTILES_PLANET_SIZE=$(stat -c%s "$PLANET")
 
     # Print the size with comma separators
-    PMTILES_PLANET_SIZE=$(printf "%'d" $PMTILES_PLANET_SIZE)
+    PMTILES_PLANET_SIZE=$(printf "%'d" "$PMTILES_PLANET_SIZE")
 
     "$DIR/rss_update.sh" "$RSS_FILE" "Build Complete" "Tiles are up to date as of ${TIMESTAMP}Z. Render took ${HOURS} ${HOUR_TEXT} and ${MINUTES} ${MINUTE_TEXT}. The planet PMTiles file is ${PMTILES_PLANET_SIZE} bytes."
   else
