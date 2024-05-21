@@ -33,10 +33,9 @@ PLANET="$WORKING_DIR/data/planet.pmtiles"
 run() {
   TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
   START_TIME=$(date +%s)
-  "$DIR/render_once.sh" "$WORKING_DIR"
 
-  # Check the exit status of render_once.sh
-  if [ $? -eq 0 ]; then
+  if "$DIR/render_once.sh" "$WORKING_DIR"
+  then
     # Record the end time
     END_TIME=$(date +%s)
 
