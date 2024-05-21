@@ -1,3 +1,4 @@
+---
 schema_name: OSM US Water Trail POIs
 schema_description: Slipways, access points, dams, weirs, and waterfalls. 
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
@@ -100,4 +101,3 @@ args:
   area:
     description: Geofabrik area to download
     default: rhode-island
-
