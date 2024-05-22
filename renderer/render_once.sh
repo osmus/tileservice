@@ -41,6 +41,7 @@ docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
 	--output="/data/planet.pmtiles" \
+	--force \
 	--transportation_name_size_for_shield \
 	--transportation_name_limit_merge \
 	--boundary-osm-only \
@@ -74,6 +75,7 @@ for file in "$DIR/layers/"*.yml; do
 		ghcr.io/onthegomap/planetiler:latest generate-custom \
 		--area=planet --bounds=world \
 		--output="/data/$layer_name.pmtiles" \
+		--force \
 		--schema="/layers/$layer_name.yml" \
 		--storage=mmap --nodemap-type=array \
 		--max-point-buffer=4
