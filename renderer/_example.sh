@@ -12,14 +12,14 @@ LOCKFILE="/tmp/planet-render.lock"
 
 # Check if lock file exists
 if [ -e "${LOCKFILE}" ]; then
-  echo "A rendering process is already running."
-  exit 1
+	echo "A rendering process is already running."
+	exit 1
 else
-  # Create a lock file
-  touch "${LOCKFILE}"
+	# Create a lock file
+	touch "${LOCKFILE}"
 
-  # Ensure the lock file is removed when we exit and when we receive signals
-  trap "rm -f ${LOCKFILE}; trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+	# Ensure the lock file is removed when we exit and when we receive signals
+	trap 'rm -f ${LOCKFILE}; trap - SIGTERM && kill -- -$$' SIGINT SIGTERM EXIT
 fi
 
 # The local path to the tileservice repo

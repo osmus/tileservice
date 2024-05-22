@@ -1,3 +1,4 @@
+---
 schema_name: OSM US Water Trails
 schema_description: Canoe and kayak waterways and portages.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
@@ -229,4 +230,3 @@ args:
   area:
     description: Geofabrik area to download
     default: rhode-island
-

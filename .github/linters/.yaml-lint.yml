@@ -1,0 +1,12 @@
+---
+extends: default
+rules:
+  indentation:
+    spaces: 2
+    indent-sequences: whatever
+  line-length: disable
+  new-line-at-end-of-file:
+    level: warning
+  trailing-spaces:
+    level: warning
+  truthy: disable
