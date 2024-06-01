@@ -54,4 +54,4 @@ xmlstarlet ed --inplace \
 	"$RSS_FILE"
 
 echo "New entry added to $RSS_FILE"
-aws s3 cp "$RSS_FILE" s3://tileserver-static/
+aws s3 cp "$RSS_FILE" s3://osmus-tile-static/
