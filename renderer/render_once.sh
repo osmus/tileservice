@@ -60,7 +60,7 @@ elif [[ $(stat -c %s "$PLANET") -lt $((50 * 1024 * 1024 * 1024)) ]]; then
 fi
 
 echo 'Uploading planet to s3 bucket in background'
-aws s3 cp "$PLANET" s3://planet-pmtiles/ --only-show-errors &
+aws s3 cp "$PLANET" s3://osmus-tile/ --only-show-errors &
 
 # Render optional layers
 for file in "$DIR/layers/"*.yml; do
@@ -82,7 +82,7 @@ for file in "$DIR/layers/"*.yml; do
 
 	echo "Uploading $layer_name to s3 bucket in background"
 	{
-		aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://planet-pmtiles/ --only-show-errors
+		aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
 		rm -rf "$WORKING_DIR/data/$layer_name.pmtiles"
 	} &
 done
