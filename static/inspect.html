@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raw Vector Tile Data View</title>
+  <link rel="stylesheet" type="text/css" href="/maplibre-gl.css" />
+  <link rel="stylesheet" type="text/css" href="/maplibre-gl-inspect.css" />
+  <script>if (typeof Symbol !== 'undefined') { document.write('<script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"><\/script>'); } else { document.write('<script src="/maplibre-gl-compat.js"><\/script>'); }</script>
+  <script>if (typeof Symbol !== 'undefined') { document.write('<script src="https://github.com/acalcutt/maplibre-gl-inspect/releases/download/v1.4.6/maplibre-gl-inspect.min.js"><\/script>'); } else { document.write('<script src="/maplibre-gl-inspect-compat.min.js"><\/script>'); }</script>
+  <style>
+    body {background:#fff;color:#333;font-family:Arial, sans-serif;}
+    #map {position:absolute;top:0;left:0;right:250px;bottom:0;}
+    h1 {position:absolute;top:5px;right:0;width:240px;margin:0;line-height:20px;font-size:20px;}
+    #layerList {position:absolute;top:35px;right:0;bottom:0;width:240px;overflow:auto;}
+    #layerList div div {width:15px;height:15px;display:inline-block;}
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <div id="map"></div>
+  <div id="layerList"></div>
+  <pre id="propertyList"></pre>
+  <script>
+  var map = new maplibregl.Map({
+    container: 'map',
+    hash: true,
+    maplibreLogo: true,
+    style: {
+      version: 8,
+      sources: {
+        'vector_layer_': {
+          type: 'vector',
+          url: 'https://dwuxtsziek7cf.cloudfront.net/planet.json'
+        }
+      },
+      layers: []
+    }
+  });
+  map.addControl(new maplibregl.NavigationControl());
+  var inspect = new MaplibreInspect({
+    showInspectMap: true,
+    showInspectButton: false
+  });
+  map.addControl(inspect);
+  map.on('styledata', function() {
+    var layerList = document.getElementById('layerList');
+    layerList.innerHTML = '';
+    Object.keys(inspect.sources).forEach(function(sourceId) {
+      var layerIds = inspect.sources[sourceId];
+      layerIds.forEach(function(layerId) {
+        var item = document.createElement('div');
+        item.innerHTML = '<div style="' +
+          'background:' + inspect.assignLayerColor(layerId) + ';' +
+        '"></div> ' + layerId;
+        layerList.appendChild(item);
+      });
+    })
+  });
+  </script>
+</body>
+</html>

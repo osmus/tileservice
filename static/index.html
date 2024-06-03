@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenMapTiles Community Vector Tile Server</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <link rel="alternate" type="application/rss+xml" title="Build status" href="rss.xml" />
+  <script>
+    function toggle_xyz(id) {
+      var el = document.getElementById(id);
+      var s = el.style;
+      s.display = s.display == 'none' ? 'inline-block' : 'none';
+      el.setSelectionRange(0, el.value.length);
+      return false;
+    }
+  </script>
+</head>
+<body>
+  <section>
+    <h1 class="title">
+      <a href="https://github.com/ZeLonewolf/openstreetmap-americana"><img src="osm-americana-logo.png" alt="OSM Americana Logo" /></a><br/>
+      Community Vector Tile Server
+    </h1>
+    <h2 class="subtitle">Part of the OSM Americana project</h2>
+    <div style="text-align:center; margin-bottom:70px"><a href="usage.html">Usage policy and CORS white list</a></div>
+      <h2 class="box-header">OpenMapTiles</h2>
+      <div class="box">
+        <div class="item">
+            <img src="openmaptiles-logo.png" alt=" preview" />
+          <div class="details">
+            <h3></h3>
+            <p class="identifier">OpenMapTiles vector tiles as used by OSM Americana.
+              <br>Rendered on servers provided by <a href="https://openstreetmap.us/">OSMUS</a>.
+              <br>Zoom 13 building merge is disabled, additional languages from <a href="https://wikidata.org/">Wikidata</a>.
+              <br>Schema <a href="https://openmaptiles.org/">&copy; OpenMapTiles</a>, map data <a href="https://openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>.</p>
+            <p class="services">
+              services: <a href="https://dwuxtsziek7cf.cloudfront.net/planet.json">TileJSON</a> | <a href="rss.xml" class="icon"><img src="rss.png" description="RSS icon" />Build Status</a>
+            </p>
+          </div>
+          <div class="viewers">
+            <a class="btn" href="/inspect.html">Inspect</a>
+          </div>
+        </div>
+      </div>
+  </section>
+  <footer>
+    <p>
+      Rendering by <a href="https://github.com/onthegomap/planetiler" target="_blank">Planetiler</a>, an open-source product by <a href="https://twitter.com/msb5014" target="_blank">Mike Barry</a>.
+    </p>
+    <p>
+      Tiles are stored in <a href="https://protomaps.com/docs/pmtiles" target="_blank">PMTiles</a> format, a vector tile format for server-less hosting, by <a href="https://protomaps.com/" target="_blank">Protomaps</a> creator <a href="https://twitter.com/bdon" target="_blank">Brandon Liu</a>.
+    </p>
+    <p>
+      This page is derived from <a href="https://github.com/maptiler/tileserver-gl" target="_blank">TileServer GL (tileserver-gl-light v4.4.0)</a> – an open-source project from <a href="https://www.maptiler.com/" target="_blank">MapTiler</a>.
+    </p>
+  </footer>
+</body>
+</html>
