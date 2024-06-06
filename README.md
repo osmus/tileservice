@@ -11,7 +11,7 @@ With this architecture, the division of service is as follows:
 
 **Provided by OSMUS**:
 1. Best-effort continuously-rendered planet updates in [PMtiles](https://docs.protomaps.com/pmtiles/) format, on an update cycle of approximately 4 hours. Service is not garaunteed, and updates may be delayed in the event of failures or during maintenance periods.
-2. Requester-pays access to an s3 bucket in the us-east-2 (Ohio) AWS zone. In the requester-pays architecture, OSMUS pays the cost of s3 storage, while the requester pays for all egress traffic from the bucket.
+2. Requester-pays access to an s3 bucket with the planet file in the us-east-2 (Ohio) AWS zone. In the requester-pays architecture, OSMUS pays the cost of s3 storage, while the requester pays for all egress traffic from the bucket.
 
 **Required by the user**:
 1. Configuration of a vector-tile server connected to the s3 bucket. OSMUS recommends [Brandon Liu](https://github.com/bdon)'s [AWS guide](https://docs.protomaps.com/deploy/aws) for steps on how to configure a server.
