@@ -31,6 +31,7 @@ jobs:
           # disable nitpicky linters
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_MARKDOWN: false
           # enable the below at some point
           VALIDATE_CSS: false
           VALIDATE_HTML: false
