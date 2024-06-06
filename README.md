@@ -3,7 +3,7 @@ This repository contains the source code for the OSM US [vector tile service](ht
 
 ## Planet Vector Tiles for General Use
 
-[OSMUS](https://openstreetmap.us/) provides OpenMapTiles-compatible planet vector tiles are available on Amazon Web Services (AWS) for use by any project, including commercial usages by connecting to an OSMUS-hosted [requester-pays](https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html) s3 bucket. The steps in this guide allow any user to set up a planet vector tile server equivalent to the OSMUS community vector tile [server](https://tile.ourmap.us/).
+[OSMUS](https://openstreetmap.us/) provides OpenMapTiles-compatible planet vector tiles on Amazon Web Services (AWS). This service is available for use by any project, including commercial usages, by connecting to an OSMUS-hosted [requester-pays](https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html) s3 bucket. The steps in this guide allow any user to set up a planet vector tile server equivalent to the OSMUS community vector tile [server](https://tile.ourmap.us/).
 
 The OSMUS bucket name is `osmus-tile` in region `us-east-2`.
 
