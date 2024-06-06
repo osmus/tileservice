@@ -10,7 +10,7 @@ The OSMUS bucket name is `osmus-tile` in region `us-east-2`.
 With this architecture, the division of service is as follows:
 
 **Provided by OSMUS**:
-1. Best-effort continuously-rendered planet updates in [PMtiles](https://docs.protomaps.com/pmtiles/) format, on an update cycle of approximately 4 hours. Service is not garaunteed, and updates may be delayed in the event of failures or during maintenance periods.
+1. Best-effort continuously-rendered planet updates in [PMtiles](https://docs.protomaps.com/pmtiles/) format, on an update cycle of approximately 4 hours. Service is not guaranteed, and updates may be delayed in the event of failures or during maintenance periods.
 2. Requester-pays access to an s3 bucket with the planet file in the us-east-2 (Ohio) AWS zone. In the requester-pays architecture, OSMUS pays the cost of s3 storage, while the requester pays for all egress traffic from the bucket.
 
 **Required by the user**:
