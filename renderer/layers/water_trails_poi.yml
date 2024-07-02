@@ -97,6 +97,24 @@ layers:
             - waterfall
             - weir
         attributes: *poi_attributes
+      - source: osm
+        geometry: point_on_line
+        min_zoom: 10
+        include_when:
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 10
+        include_when:
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
 args:
   area:
     description: Geofabrik area to download
