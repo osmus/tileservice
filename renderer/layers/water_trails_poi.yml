@@ -64,8 +64,12 @@ layers:
             tag_value: leisure
           - key: lock
             tag_value: lock
+          - key: lock:height
+            tag_value: lock:height
           - key: lock_name
             tag_value: lock_name
+          - key: lock_ref
+            tag_value: lock_ref
           - key: mtb
             tag_value: mtb
           - key: name
@@ -120,7 +124,7 @@ layers:
             - weir
         attributes: *poi_attributes
       - source: osm
-        geometry: point_on_line
+        geometry: line_centroid
         min_zoom: 10
         include_when:
           - __all__:
