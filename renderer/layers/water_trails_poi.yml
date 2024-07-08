@@ -62,6 +62,10 @@ layers:
             tag_value: information
           - key: leisure
             tag_value: leisure
+          - key: lock
+            tag_value: lock
+          - key: lock_name
+            tag_value: lock_name
           - key: mtb
             tag_value: mtb
           - key: name
