@@ -153,8 +153,8 @@ layers:
               - link
               - flowline
             - canoe: __any__
-        exclude_when:
-          indoor: __any__
+            - __not__:
+              indoor: __any__
         attributes:
           - key: OSM_ID
             value: "${feature.id}"
