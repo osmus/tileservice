@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Water Trail POIs
-schema_description: Slipways, access points, locks, dams, weirs, and waterfalls.
+schema_description: Slipways, access points, locks, dams, weirs, waterfalls, and streamgages.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
