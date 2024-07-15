@@ -191,6 +191,21 @@ layers:
             tag_value: wheelchair
           - key: width
             tag_value: width
+  - id: trail_qa
+    features:
+      # gather fixmes as points
+      - source: osm
+        geometry: point_on_line
+        min_zoom: *min_zoom
+        include_when:
+          __all__:
+            - __any__: *trails_filter
+            - __any__:
+              - fixme: __any__
+              - FIXME: __any__
+              - todo: __any__
+              - TODO: __any__
+        attributes: *trail_attributes
 args:
   area:
     description: Geofabrik area to download
