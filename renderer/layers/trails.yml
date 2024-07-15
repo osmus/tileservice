@@ -26,6 +26,7 @@ layers:
               dog: __any__
               foot: __any__
               horse: __any__
+              mtb: __any__
               piste:type: __any__
               ski:nordic: __any__
               snowmobile: __any__
@@ -91,6 +92,16 @@ layers:
             tag_value: motor_vehicle
           - key: mtb
             tag_value: mtb
+          - key: mtb:name
+            tag_value: mtb:name
+          - key: mtb:scale
+            tag_value: mtb:scale
+          - key: mtb:scale:imba
+            tag_value: mtb:scale:imba
+          - key: mtb:scale:uphill
+            tag_value: mtb:scale:uphill
+          - key: mtb:type
+            tag_value: mtb:type
           - key: name
             tag_value: name
           - key: noname
