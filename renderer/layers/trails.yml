@@ -11,7 +11,7 @@ layers:
     features:
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: &min_zoom 5
         include_when:
           - highway:
             - bridleway
@@ -161,7 +161,7 @@ layers:
             tag_value: width
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: *min_zoom
         include_when:
           highway:
             - footway
@@ -177,7 +177,7 @@ layers:
         attributes: *trail_attributes
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: *min_zoom
         include_when:
           highway: cycleway
         exclude_when:
@@ -192,7 +192,7 @@ layers:
       # gather any other roads or paths that are explicitly marked as trails
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: *min_zoom
         include_when:
           __all__:
             - highway: __any__
