@@ -191,45 +191,6 @@ layers:
             tag_value: wheelchair
           - key: width
             tag_value: width
-      - source: osm
-        geometry: line
-        min_zoom: *min_zoom
-        include_when:
-          highway:
-            - footway
-            - steps
-        exclude_when:
-          # ignore sidewalks, crossings, access aisles, etc.
-          footway: __any__
-          indoor: __any__
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          trail: no
-        attributes: *trail_attributes
-      - source: osm
-        geometry: line
-        min_zoom: *min_zoom
-        include_when:
-          highway: cycleway
-        exclude_when:
-          # ignore bike lanes that are part of roads
-          cycleway: lane
-          indoor: __any__
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          trail: no
-        attributes: *trail_attributes
-      # gather any other roads or paths that are explicitly marked as trails
-      - source: osm
-        geometry: line
-        min_zoom: *min_zoom
-        include_when:
-          __all__:
-            - highway: __any__
-            - trail: yes
-        attributes: *trail_attributes
 args:
   area:
     description: Geofabrik area to download
