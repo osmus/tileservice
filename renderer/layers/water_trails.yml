@@ -12,12 +12,14 @@ layers:
       # gather any other roads or paths that are explicitly marked as portages
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: &min_zoom 5
         include_when:
+          &portage_filter
           __all__:
             - highway: __any__
             - portage: __any__
         attributes:
+          &portage_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -138,8 +140,9 @@ layers:
             tag_value: width
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: *min_zoom
         include_when:
+          &waterway_filter
           __all__:
             - waterway:
               - river
@@ -156,6 +159,7 @@ layers:
             - __not__:
               indoor: __any__
         attributes:
+          &waterway_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -230,6 +234,29 @@ layers:
             tag_value: waterway
           - key: width
             tag_value: width
+  - id: water_trail_qa
+    features:
+      # gather fixmes as points
+      - source: osm
+        geometry: point_on_line
+        min_zoom: *min_zoom
+        include_when:
+          __all__:
+            - __any__: *portage_filter
+            - __any__: &fixme_filter
+              - fixme: __any__
+              - FIXME: __any__
+              - todo: __any__
+              - TODO: __any__
+        attributes: *portage_attributes
+      - source: osm
+        geometry: point_on_line
+        min_zoom: *min_zoom
+        include_when:
+          __all__:
+            - __any__: *waterway_filter
+            - __any__: *fixme_filter
+        attributes: *waterway_attributes
 args:
   area:
     description: Geofabrik area to download
