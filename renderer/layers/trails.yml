@@ -13,33 +13,54 @@ layers:
         geometry: line
         min_zoom: &min_zoom 5
         include_when:
-          - highway:
-            - bridleway
-            - path
-            - via_ferrata
+          &trails_filter
+          # gather any roads or paths that are explicitly marked as trails
           - __all__:
-            # we only care about tracks if they have some trail access tag
-            - highway: track
+            - highway: __any__
+            - trail: yes
+          # gather ways we think might be trails based on common tagging patterns
+          - __all__:
             - __any__:
-              atv: __any__
-              bicycle: __any__
-              dog: __any__
-              foot: __any__
-              horse: __any__
-              mtb: __any__
-              piste:type: __any__
-              ski:nordic: __any__
-              snowmobile: __any__
-              wheelchair: __any__
-        exclude_when:
-          # exclude anything indoors
-          indoor: __any__
-          # exclude common combinations that probably aren't trails
-          man_made: pier
-          public_transport: platform
-          railway: platform
-          # exclude any roads or paths explicitly marked as not a trail
-          trail: no
+              - highway:
+                - bridleway
+                - path
+                - via_ferrata
+              - __all__:
+                # we only care about tracks if they have some trail access tag
+                - highway: track
+                - __any__:
+                  atv: __any__
+                  bicycle: __any__
+                  dog: __any__
+                  foot: __any__
+                  horse: __any__
+                  mtb: __any__
+                  piste:type: __any__
+                  ski:nordic: __any__
+                  snowmobile: __any__
+                  wheelchair: __any__
+              - __all__:
+                - highway:
+                  - footway
+                  - steps
+                - __not__:
+                  # ignore sidewalks, crossings, access aisles, etc.
+                  footway: __any__
+              - __all__:
+                - highway: cycleway
+                - __not__:
+                  # ignore bike lanes that are part of roads
+                  cycleway: lane
+            - __not__:
+              __any__:
+                # exclude anything indoors
+                indoor: __any__
+                # exclude common combinations that probably aren't trails
+                man_made: pier
+                public_transport: platform
+                railway: platform
+                # exclude anything explicitly marked as not a trail
+                trail: no
         attributes:
           &trail_attributes
           - key: OSM_ID
