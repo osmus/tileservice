@@ -25,7 +25,7 @@ docker system prune --force
 # Make sure we have the latest planetiler
 docker pull ghcr.io/onthegomap/planetiler:latest
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet \
@@ -36,7 +36,7 @@ rm -rf "$WORKING_DIR/data/sources/monaco.osm.pbf"
 
 PLANET="$WORKING_DIR/data/planet.pmtiles"
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
@@ -69,7 +69,7 @@ for file in "$DIR/layers/"*.yml; do
 
 	echo "Processing layer: $layer_name"
 
-	docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
+	docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 		-v "$WORKING_DIR/data":/data \
 		-v "$DIR/layers":/layers \
 		ghcr.io/onthegomap/planetiler:latest generate-custom \
