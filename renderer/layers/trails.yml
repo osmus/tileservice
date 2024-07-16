@@ -142,6 +142,8 @@ layers:
             tag_value: oneway:mtb
           - key: oneway:portage
             tag_value: oneway:portage
+          - key: oneway:snowmobile
+            tag_value: oneway:snowmobile
           - key: oneway:vehicle
             tag_value: oneway:vehicle
           - key: oneway:wheelchair
