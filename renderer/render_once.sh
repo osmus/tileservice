@@ -25,7 +25,7 @@ docker system prune --force
 # Make sure we have the latest planetiler
 docker pull ghcr.io/onthegomap/planetiler:latest
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet \
@@ -36,7 +36,7 @@ rm -rf "$WORKING_DIR/data/sources/monaco.osm.pbf"
 
 PLANET="$WORKING_DIR/data/planet.pmtiles"
 
-docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
+docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
@@ -69,7 +69,7 @@ for file in "$DIR/layers/"*.yml; do
 
 	echo "Processing layer: $layer_name"
 
-	docker run -e JAVA_TOOL_OPTIONS='-Xmx24g' \
+	docker run -e JAVA_TOOL_OPTIONS='-Xmx48g' \
 		-v "$WORKING_DIR/data":/data \
 		-v "$DIR/layers":/layers \
 		ghcr.io/onthegomap/planetiler:latest generate-custom \
@@ -77,7 +77,7 @@ for file in "$DIR/layers/"*.yml; do
 		--output="/data/$layer_name.pmtiles" \
 		--force \
 		--schema="/layers/$layer_name.yml" \
-		--storage=mmap --nodemap-type=array \
+		--storage=ram --nodemap-type=array \
 		--max-point-buffer=4
 
 	echo "Uploading $layer_name to s3 bucket in background"
