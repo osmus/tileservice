@@ -143,8 +143,8 @@ layers:
         min_zoom: *min_zoom
         include_when:
           &waterway_filter
-          __all__:
-            waterway:
+          - __all__:
+            - waterway:
               - river
               - stream
               - tidal_channel
@@ -155,9 +155,9 @@ layers:
               - fairway
               - link
               - flowline
-            canoe: __any__
-            __not__:
-              indoor: __any__
+            - canoe: __any__
+            - __not__:
+              - indoor: __any__
         attributes:
           &waterway_attributes
           - key: OSM_ID
