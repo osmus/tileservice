@@ -101,6 +101,7 @@ layers:
           information:
             - route_marker
             - guidepost
+          man_made: cairn
         attributes: *trail_poi_attributes
 args:
   area:
