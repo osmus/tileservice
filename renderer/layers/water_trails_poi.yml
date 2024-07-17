@@ -94,6 +94,8 @@ layers:
             tag_value: portage
           - key: ref
             tag_value: ref
+          - key: ski
+            tag_value: ski
           - key: ski:nordic
             tag_value: ski:nordic
           - key: snowmobile
