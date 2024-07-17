@@ -90,6 +90,8 @@ layers:
             tag_value: opening_hours
           - key: operator
             tag_value: operator
+          - key: portage
+            tag_value: portage
           - key: ref
             tag_value: ref
           - key: ski:nordic
