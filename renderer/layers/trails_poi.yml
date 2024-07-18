@@ -62,6 +62,8 @@ layers:
             tag_value: information
           - key: leisure
             tag_value: leisure
+          - key: man_made
+            tag_value: man_made
           - key: mtb
             tag_value: mtb
           - key: name
