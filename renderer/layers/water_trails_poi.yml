@@ -157,6 +157,11 @@ layers:
           - __all__:
             - man_made: monitoring_station
             - __any__:
+              - website: __any__
+              - __all__:
+                - ref: __any__
+                - operator: __any__
+            - __any__:
               monitoring:water_level: yes
               monitoring:tide_gauge: yes
               monitoring:flow_rate: yes
