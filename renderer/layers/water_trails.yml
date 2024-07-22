@@ -156,8 +156,6 @@ layers:
               - link
               - flowline
             - canoe: __any__
-            - __not__:
-              - indoor: __any__
         attributes:
           &waterway_attributes
           - key: OSM_ID
