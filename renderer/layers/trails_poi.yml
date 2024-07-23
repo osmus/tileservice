@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Trail POIs
-schema_description: Trailheads, ranger stations, route markers, guideposts, cairns, and protected areas.
+schema_description: Trailheads, ranger stations, route markers, and guideposts.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
@@ -9,7 +9,7 @@ sources:
 layers:
   - id: trail_poi
     features:
-      # collect ranger stations and trailheads mapped as nodes
+      # collect ranger stations, trailheads, and put-ins mapped as nodes
       - source: osm
         geometry: point
         min_zoom: 7
@@ -99,7 +99,6 @@ layers:
         include_when:
           amenity: ranger_station
         attributes: *trail_poi_attributes
-      # collect route markers, guideposts, and cairns mapped as nodes
       - source: osm
         geometry: point
         # route markers are abundant so restrict to higher zooms
@@ -110,39 +109,6 @@ layers:
             - guidepost
           man_made: cairn
         attributes: *trail_poi_attributes
-      # collect protected areas as points
-      - source: osm
-        geometry: polygon_centroid_if_convex
-        min_zoom: 4
-        min_tile_cover_size: 0.2
-        include_when:
-          leisure:
-            - park
-            - nature_reserve
-          boundary:
-            - national_park
-            - protected_area
-        attributes:
-          - key: OSM_ID
-            value: "${feature.id}"
-          - key: OSM_TYPE
-            value: "${feature.osm_type}"
-          - key: OSM_VERSION
-            value: "${feature.osm_version}"
-          - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
-          - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
-          - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
-          - key: access
-            tag_value: access
-          - key: leisure
-            tag_value: leisure
-          - key: boundary
-            tag_value: boundary
-          - key: protected_area
-            tag_value: protected_area
 args:
   area:
     description: Geofabrik area to download
