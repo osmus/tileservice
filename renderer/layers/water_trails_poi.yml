@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Water Trail POIs
-schema_description: Slipways, access points, locks, dams, weirs, waterfalls, and streamgages.
+schema_description: Slipways, access points, locks, dams, weirs, beaver dams, waterfalls, and streamgages.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
@@ -82,6 +82,8 @@ layers:
             tag_value: mtb
           - key: name
             tag_value: name
+          - key: natural
+            tag_value: natural
           - key: noname
             tag_value: noname
           - key: noref
@@ -116,6 +118,7 @@ layers:
         geometry: point
         min_zoom: 10
         include_when:
+          natural: beaver_dam
           waterway:
             - dam
             - waterfall
@@ -125,6 +128,7 @@ layers:
         geometry: point_on_line
         min_zoom: 10
         include_when:
+          natural: beaver_dam
           waterway:
             - dam
             - waterfall
@@ -134,6 +138,7 @@ layers:
         geometry: polygon_centroid_if_convex
         min_zoom: 10
         include_when:
+          natural: beaver_dam
           waterway:
             - dam
             - waterfall
