@@ -109,6 +109,20 @@ layers:
             tag_value: informal
           - key: inline_skates
             tag_value: inline_skates
+          - key: maxspeed
+            tag_value: maxspeed
+          - key: maxspeed:atv
+            tag_value: maxspeed:atv
+          - key: maxspeed:bicycle
+            tag_value: maxspeed:bicycle
+          - key: maxspeed:horse
+            tag_value: maxspeed:horse
+          - key: maxspeed:motor_vehicle
+            tag_value: maxspeed:motor_vehicle
+          - key: maxspeed:snowmobile
+            tag_value: maxspeed:snowmobile
+          - key: maxspeed:vehicle
+            tag_value: maxspeed:vehicle
           - key: motor_vehicle
             tag_value: motor_vehicle
           - key: mtb
