@@ -216,6 +216,8 @@ layers:
             tag_value: sea_kayak
           - key: ship
             tag_value: ship
+          - key: streamgauge
+            tag_value: streamgauge
           - key: survey:date
             tag_value: survey:date
           - key: tidal
