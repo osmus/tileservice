@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Trail POIs
-schema_description: Trailheads, ranger stations, route markers, and guideposts.
+schema_description: Trailheads, ranger stations, route markers, guideposts, cairns, and protected areas.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
@@ -9,7 +9,7 @@ sources:
 layers:
   - id: trail_poi
     features:
-      # collect ranger stations, trailheads, and put-ins mapped as nodes
+      # collect ranger stations and trailheads mapped as nodes
       - source: osm
         geometry: point
         min_zoom: 7
@@ -38,6 +38,8 @@ layers:
             tag_value: atv
           - key: bicycle
             tag_value: bicycle
+          - key: boundary
+            tag_value: boundary
           - key: canoe
             tag_value: canoe
           - key: check_date
@@ -76,6 +78,8 @@ layers:
             tag_value: operator
           - key: portage
             tag_value: portage
+          - key: protected_area
+            tag_value: protected_area
           - key: ski
             tag_value: ski
           - key: ski:nordic
@@ -99,6 +103,7 @@ layers:
         include_when:
           amenity: ranger_station
         attributes: *trail_poi_attributes
+      # collect route markers, guideposts, and cairns mapped as nodes
       - source: osm
         geometry: point
         # route markers are abundant so restrict to higher zooms
@@ -108,6 +113,19 @@ layers:
             - route_marker
             - guidepost
           man_made: cairn
+        attributes: *trail_poi_attributes
+      # collect protected areas as points
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 4
+        min_size: 15
+        include_when:
+          leisure:
+            - park
+            - nature_reserve
+          boundary:
+            - national_park
+            - protected_area
         attributes: *trail_poi_attributes
 args:
   area:
