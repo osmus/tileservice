@@ -52,6 +52,8 @@ layers:
             tag_value: FIXME
           - key: foot
             tag_value: foot
+          - key: height
+            tag_value: height
           - key: highway
             tag_value: highway
           - key: hiking
