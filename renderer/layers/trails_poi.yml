@@ -122,12 +122,15 @@ layers:
         min_zoom: 4
         min_size: 15
         include_when:
-          leisure:
-            - park
-            - nature_reserve
-          boundary:
-            - national_park
-            - protected_area
+          __all__:
+            - name: __any__
+            - __any__:
+              - leisure:
+                - park
+                - nature_reserve
+              - boundary:
+                - national_park
+                - protected_area
         attributes: *trail_poi_attributes
 args:
   area:
