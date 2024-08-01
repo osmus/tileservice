@@ -133,7 +133,7 @@ layers:
             tag_value: inline_skates
           - key: intermittent
             tag_value: intermittent
-           - key: lock
+          - key: lock
             tag_value: lock
           - key: maxspeed
             tag_value: maxspeed
