@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Trails
-schema_description: A map of trails
+schema_description: Trails and water trails.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
@@ -14,10 +14,26 @@ layers:
         min_zoom: &min_zoom 5
         include_when:
           &trails_filter
-          # gather any roads or paths that are explicitly marked as trails
+          # gather any roads or paths that are explicitly marked as trails or portages
           - __all__:
             - highway: __any__
-            - trail: yes
+            - __any__:
+              - trail: yes
+              - portage: __any__
+          # gather waterways with canoe tags
+          - __all__:
+            - waterway:
+              - river
+              - stream
+              - tidal_channel
+              - canal
+              - drain
+              - ditch
+              - canoe_pass
+              - fairway
+              - link
+              - flowline
+            - canoe: __any__
           # gather ways we think might be trails based on common tagging patterns
           - __all__:
             - __any__:
@@ -81,10 +97,16 @@ layers:
             tag_value: atv
           - key: bicycle
             tag_value: bicycle
+          - key: boat
+            tag_value: boat
           - key: bridge
             tag_value: bridge
+          - key: canoe
+            tag_value: canoe
           - key: check_date
             tag_value: check_date
+          - key: covered
+            tag_value: covered
           - key: dog
             tag_value: dog
           - key: fixme
@@ -109,6 +131,10 @@ layers:
             tag_value: informal
           - key: inline_skates
             tag_value: inline_skates
+          - key: intermittent
+            tag_value: intermittent
+           - key: lock
+            tag_value: lock
           - key: maxspeed
             tag_value: maxspeed
           - key: maxspeed:atv
@@ -123,6 +149,8 @@ layers:
             tag_value: maxspeed:snowmobile
           - key: maxspeed:vehicle
             tag_value: maxspeed:vehicle
+          - key: motorboat
+            tag_value: motorboat
           - key: motor_vehicle
             tag_value: motor_vehicle
           - key: mtb
@@ -145,8 +173,12 @@ layers:
             tag_value: oneway
           - key: oneway:atv
             tag_value: oneway:atv
+          - key: oneway:boat
+            tag_value: oneway:boat
           - key: oneway:bicycle
             tag_value: oneway:bicycle
+          - key: oneway:canoe
+            tag_value: oneway:canoe
           - key: oneway:foot
             tag_value: oneway:foot
           - key: oneway:horse
@@ -163,6 +195,8 @@ layers:
             tag_value: oneway:vehicle
           - key: oneway:wheelchair
             tag_value: oneway:wheelchair
+          - key: open_water
+            tag_value: open_water
           - key: operator
             tag_value: operator
           - key: piste:type
@@ -173,8 +207,16 @@ layers:
             tag_value: ramp:bicycle
           - key: ramp:wheelchair
             tag_value: ramp:wheelchair
+          - key: rapids
+            tag_value: rapids
           - key: sac_scale
             tag_value: sac_scale
+          - key: sailboat
+            tag_value: sailboat
+          - key: sea_kayak
+            tag_value: sea_kayak
+          - key: ship
+            tag_value: ship
           - key: ski:nordic
             tag_value: ski:nordic
           - key: smoothness
@@ -187,6 +229,8 @@ layers:
             tag_value: survey:date
           - key: symbol
             tag_value: symbol
+          - key: tidal
+            tag_value: tidal
           - key: todo
             tag_value: todo
           - key: TODO
@@ -203,6 +247,10 @@ layers:
             tag_value: tunnel
           - key: vehicle
             tag_value: vehicle
+          - key: waterbody:name
+            tag_value: waterbody:name
+          - key: waterway
+            tag_value: waterway
           - key: wheelchair
             tag_value: wheelchair
           - key: width
