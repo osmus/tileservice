@@ -1,6 +1,6 @@
 ---
 schema_name: OSM US Trails
-schema_description: Trails and water trails.
+schema_description: Trails, water trails, and related points of interest.
 attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
 sources:
   osm:
@@ -270,6 +270,222 @@ layers:
               - todo: __any__
               - TODO: __any__
         attributes: *trail_attributes
+  - id: trail_poi
+    features:
+      # gather ranger stations and trailheads mapped as nodes
+      - source: osm
+        geometry: point
+        min_zoom: 7
+        include_when:
+          amenity: ranger_station
+          highway: trailhead
+        attributes:
+          &poi_attributes
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
+          - key: OSM_VERSION
+            value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+            value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+            value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+            value: "${feature.osm_user_name}"
+          - key: access
+            tag_value: access
+          - key: amenity
+            tag_value: amenity
+          - key: atv
+            tag_value: atv
+          - key: bicycle
+            tag_value: bicycle
+          - key: boundary
+            tag_value: boundary
+          - key: canoe
+            tag_value: canoe
+          - key: check_date
+            tag_value: check_date
+          - key: dog
+            tag_value: dog
+          - key: ele
+            tag_value: ele
+          - key: fixme
+            tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: foot
+            tag_value: foot
+          - key: height
+            tag_value: height
+          - key: highway
+            tag_value: highway
+          - key: hiking
+            tag_value: hiking
+          - key: horse
+            tag_value: horse
+          - key: informal
+            tag_value: informal
+          - key: information
+            tag_value: information
+          - key: leisure
+            tag_value: leisure
+          - key: lock
+            tag_value: lock
+          - key: lock:height
+            tag_value: lock:height
+          - key: lock_name
+            tag_value: lock_name
+          - key: lock_ref
+            tag_value: lock_ref
+          - key: man_made
+            tag_value: man_made
+          - key: monitoring:water_level
+            tag_value: monitoring:water_level
+          - key: monitoring:tide_gauge
+            tag_value: monitoring:tide_gauge
+          - key: monitoring:flow_rate
+            tag_value: monitoring:flow_rate
+          - key: mtb
+            tag_value: mtb
+          - key: name
+            tag_value: name
+          - key: natural
+            tag_value: natural
+          - key: noname
+            tag_value: noname
+          - key: noref
+            tag_value: noref
+          - key: opening_hours
+            tag_value: opening_hours
+          - key: operator
+            tag_value: operator
+          - key: portage
+            tag_value: portage
+          - key: protected_area
+            tag_value: protected_area
+          - key: ref
+            tag_value: ref
+          - key: ski
+            tag_value: ski
+          - key: ski:nordic
+            tag_value: ski:nordic
+          - key: snowmobile
+            tag_value: snowmobile
+          - key: survey:date
+            tag_value: survey:date
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
+          - key: trailer
+            tag_value: trailer
+          - key: waterway
+            tag_value: waterway
+          - key: wheelchair
+            tag_value: wheelchair
+      # gather ranger stations mapped as areas
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 7
+        include_when:
+          amenity: ranger_station
+        attributes: *poi_attributes
+      # gather route markers, guideposts, and cairns mapped as nodes
+      - source: osm
+        geometry: point
+        # route markers are abundant so restrict to higher zooms
+        min_zoom: 12
+        include_when:
+          information:
+            - route_marker
+            - guidepost
+          man_made: cairn
+        attributes: *poi_attributes
+      # gather protected areas as points
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 4
+        min_size: 15
+        include_when:
+          __all__:
+            - name: __any__
+            - __any__:
+              - leisure:
+                - park
+                - nature_reserve
+              - boundary:
+                - national_park
+                - protected_area
+        attributes: *poi_attributes
+      - source: osm
+        geometry: point
+        min_zoom: 8
+        include_when:
+          canoe: put_in
+          leisure: slipway
+          waterway: access_point
+        attributes: *poi_attributes
+      - source: osm
+        geometry: point
+        min_zoom: 10
+        include_when:
+          natural: beaver_dam
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
+      - source: osm
+        geometry: point_on_line
+        min_zoom: 10
+        include_when:
+          natural: beaver_dam
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 10
+        include_when:
+          natural: beaver_dam
+          waterway:
+            - dam
+            - waterfall
+            - weir
+        attributes: *poi_attributes
+      - source: osm
+        geometry: line_centroid
+        min_zoom: 10
+        include_when:
+          - __all__:
+            - lock: yes
+            - waterway:
+              - canal
+              - river
+              - stream
+        attributes: *poi_attributes
+      - source: osm
+        geometry: point
+        min_zoom: 10
+        include_when:
+          - __all__:
+            - man_made: monitoring_station
+            # filter to stations that we can link externally
+            - __any__:
+              - website: __any__
+              - __all__:
+                - ref: __any__
+                - operator: __any__
+            # filter to surface water monitoring stations
+            - __any__:
+              monitoring:water_level: yes
+              monitoring:tide_gauge: yes
+              monitoring:flow_rate: yes
+        attributes: *poi_attributes
 args:
   area:
     description: Geofabrik area to download
