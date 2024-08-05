@@ -486,13 +486,11 @@ layers:
               monitoring:tide_gauge: yes
               monitoring:flow_rate: yes
         attributes: *poi_attributes
-  # gather protected areas as polygons
-  - id: park
-    features:
+      # gather protected areas as points
       - source: osm
-        geometry: polygon
+        geometry: polygon_centroid_if_convex
         min_zoom: 4
-        min_size: 0.5
+        min_size: 15
         include_when:
           &parks_filter
           __all__:
@@ -505,13 +503,13 @@ layers:
                 - national_park
                 - protected_area
         attributes: *poi_attributes
-  # gather protected areas as points
-  - id: park_poi
+  # gather protected areas as polygons on separate layer
+  - id: park
     features:
       - source: osm
-        geometry: polygon_centroid_if_convex
+        geometry: polygon
         min_zoom: 4
-        min_size: 15
+        min_size: 0.5
         include_when: *parks_filter
         attributes: *poi_attributes
 args:
