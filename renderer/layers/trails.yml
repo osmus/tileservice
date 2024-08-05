@@ -415,6 +415,7 @@ layers:
         geometry: point
         min_zoom: 10
         include_when:
+          &waterway_barriers_filter
           natural: beaver_dam
           waterway:
             - dam
@@ -424,22 +425,12 @@ layers:
       - source: osm
         geometry: point_on_line
         min_zoom: 10
-        include_when:
-          natural: beaver_dam
-          waterway:
-            - dam
-            - waterfall
-            - weir
+        include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: polygon_centroid_if_convex
         min_zoom: 10
-        include_when:
-          natural: beaver_dam
-          waterway:
-            - dam
-            - waterfall
-            - weir
+        include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: line_centroid
