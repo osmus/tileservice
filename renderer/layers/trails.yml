@@ -403,22 +403,6 @@ layers:
             - guidepost
           man_made: cairn
         attributes: *poi_attributes
-      # gather protected areas as points
-      - source: osm
-        geometry: polygon_centroid_if_convex
-        min_zoom: 4
-        min_size: 15
-        include_when:
-          __all__:
-            - name: __any__
-            - __any__:
-              - leisure:
-                - park
-                - nature_reserve
-              - boundary:
-                - national_park
-                - protected_area
-        attributes: *poi_attributes
       - source: osm
         geometry: point
         min_zoom: 8
@@ -485,6 +469,32 @@ layers:
               monitoring:water_level: yes
               monitoring:tide_gauge: yes
               monitoring:flow_rate: yes
+        attributes: *poi_attributes
+  - id: park
+    features:
+      # gather protected areas as polygons
+      - source: osm
+        geometry: polygon
+        min_zoom: 4
+        min_size: 0.5
+        include_when:
+          &parks_filter
+          __all__:
+            - name: __any__
+            - __any__:
+              - leisure:
+                - park
+                - nature_reserve
+              - boundary:
+                - national_park
+                - protected_area
+        attributes: *poi_attributes
+      # gather protected areas as points
+      - source: osm
+        geometry: polygon_centroid_if_convex
+        min_zoom: 4
+        min_size: 15
+        include_when: *parks_filter
         attributes: *poi_attributes
 args:
   area:
