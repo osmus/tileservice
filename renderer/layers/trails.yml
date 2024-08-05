@@ -272,13 +272,17 @@ layers:
         attributes: *trail_attributes
   - id: trail_poi
     features:
-      # gather ranger stations and trailheads mapped as nodes
+      # gather POIs mapped as nodes
       - source: osm
         geometry: point
         min_zoom: 7
         include_when:
           amenity: ranger_station
           highway: trailhead
+          tourism:
+            - camp_site
+            - camp_pitch
+            - viewpoint
         attributes:
           &poi_attributes
           - key: OSM_ID
@@ -299,18 +303,24 @@ layers:
             tag_value: amenity
           - key: atv
             tag_value: atv
+          - key: backcountry
+            tag_value: backcountry
           - key: bicycle
             tag_value: bicycle
           - key: boundary
             tag_value: boundary
           - key: canoe
             tag_value: canoe
+          - key: caravans
+            tag_value: caravans
           - key: check_date
             tag_value: check_date
           - key: dog
             tag_value: dog
           - key: ele
             tag_value: ele
+          - key: fee
+            tag_value: fee
           - key: fixme
             tag_value: fixme
           - key: FIXME
@@ -329,6 +339,8 @@ layers:
             tag_value: informal
           - key: information
             tag_value: information
+          - key: internet_access
+            tag_value: internet_access
           - key: leisure
             tag_value: leisure
           - key: lock
@@ -361,12 +373,16 @@ layers:
             tag_value: opening_hours
           - key: operator
             tag_value: operator
+          - key: parking
+            tag_value: parking
           - key: portage
             tag_value: portage
           - key: protected_area
             tag_value: protected_area
           - key: ref
             tag_value: ref
+          - key: shower
+            tag_value: shower
           - key: ski
             tag_value: ski
           - key: ski:nordic
@@ -375,22 +391,31 @@ layers:
             tag_value: snowmobile
           - key: survey:date
             tag_value: survey:date
+          - key: tents
+            tag_value: tents
           - key: todo
             tag_value: todo
           - key: TODO
             tag_value: TODO
+          - key: toilets
+            tag_value: toilets
+          - key: tourism
+            tag_value: tourism
           - key: trailer
             tag_value: trailer
           - key: waterway
             tag_value: waterway
           - key: wheelchair
             tag_value: wheelchair
-      # gather ranger stations mapped as areas
+      # gather POIs mapped as areas for certain types
       - source: osm
         geometry: polygon_centroid_if_convex
         min_zoom: 7
         include_when:
           amenity: ranger_station
+          tourism:
+            - camp_site
+            - camp_pitch
         attributes: *poi_attributes
       # gather route markers, guideposts, and cairns mapped as nodes
       - source: osm
