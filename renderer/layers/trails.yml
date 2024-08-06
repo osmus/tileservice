@@ -14,9 +14,11 @@ layers:
         min_zoom: &min_zoom 5
         include_when:
           &trails_filter
-          # gather any roads or paths that are explicitly marked as trails or portages
+          # gather any roads, paths, or ferries that are explicitly marked as trails or portages
           - __all__:
-            - highway: __any__
+            - __any__:
+              - highway: __any__
+              - route: ferry
             - __any__:
               - trail: yes
               - portage: __any__
