@@ -29,7 +29,7 @@ docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
 	ghcr.io/onthegomap/planetiler:latest --area=planet \
-	--download --download-only --only-fetch-wikidata
+	--download --download-only --only-fetch-wikidata --wikidata-max-age=P30D --wikidata-update-limit=100000
 
 # Remove default downloaded OSM file
 rm -rf "$WORKING_DIR/data/sources/monaco.osm.pbf"
