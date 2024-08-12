@@ -513,6 +513,13 @@ layers:
                 - national_park
                 - protected_area
         attributes: *poi_attributes
+      # gather trees at low zooms
+      - source: osm
+        geometry: point
+        min_zoom: 16
+        include_when:
+          natural: tree
+        attributes: *poi_attributes
   # gather protected areas as polygons on separate layer
   - id: park
     features:
