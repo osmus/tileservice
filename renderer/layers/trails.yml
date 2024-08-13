@@ -516,7 +516,7 @@ layers:
       # gather trees at low zooms
       - source: osm
         geometry: point
-        min_zoom: 16
+        min_zoom: 14
         include_when:
           natural: tree
         attributes: *poi_attributes
