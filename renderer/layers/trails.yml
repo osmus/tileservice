@@ -21,6 +21,12 @@ layers:
               - route: ferry
             - __any__:
               - trail: yes
+              - hiking:
+                - yes
+                - designated
+              - mtb:
+                - yes
+                - designated
               - portage: __any__
           # gather waterways with canoe tags
           - __all__:
