@@ -263,20 +263,13 @@ layers:
             tag_value: wheelchair
           - key: width
             tag_value: width
-  - id: trail_qa
+  - id: trail_centerpoint
     features:
-      # gather fixmes as points
+      # gather trails as points so we can render markers for them at any zoom level
       - source: osm
         geometry: point_on_line
         min_zoom: *min_zoom
-        include_when:
-          __all__:
-            - __any__: *trails_filter
-            - __any__:
-              - fixme: __any__
-              - FIXME: __any__
-              - todo: __any__
-              - TODO: __any__
+        include_when: *trails_filter
         attributes: *trail_attributes
   - id: trail_poi
     features:
