@@ -218,6 +218,8 @@ layers:
             tag_value: ramp:wheelchair
           - key: rapids
             tag_value: rapids
+          - key: route
+            tag_value: route
           - key: sac_scale
             tag_value: sac_scale
           - key: sailboat
