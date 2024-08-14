@@ -393,6 +393,8 @@ layers:
             tag_value: protected_area
           - key: ref
             tag_value: ref
+          - key: reservation
+            tag_value: reservation
           - key: shelter_type
             tag_value: shelter_type
           - key: shower
