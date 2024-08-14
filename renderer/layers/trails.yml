@@ -12,6 +12,7 @@ layers:
       - source: osm
         geometry: line
         min_zoom: &min_zoom 5
+        min_size: 0.5
         include_when:
           &trails_filter
           # gather any roads, paths, or ferries that are explicitly marked as trails or portages
