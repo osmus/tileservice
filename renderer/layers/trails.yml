@@ -11,7 +11,7 @@ layers:
     features:
       - source: osm
         geometry: line
-        min_zoom: &min_zoom 5
+        min_zoom: 5
         min_size: 0.5
         include_when:
           &trails_filter
@@ -271,7 +271,7 @@ layers:
       # gather trails as points so we can render markers for them at any zoom level
       - source: osm
         geometry: point_on_line
-        min_zoom: *min_zoom
+        min_zoom: 7
         include_when:
           __all__:
             - __any__: *trails_filter
