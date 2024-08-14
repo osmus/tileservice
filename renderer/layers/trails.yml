@@ -269,7 +269,15 @@ layers:
       - source: osm
         geometry: point_on_line
         min_zoom: *min_zoom
-        include_when: *trails_filter
+        include_when:
+          __all__:
+            - __any__: *trails_filter
+            - __any__:
+              - fixme: __any__
+              - FIXME: __any__
+              - todo: __any__
+              - TODO: __any__
+              - route: ferry
         attributes: *trail_attributes
   - id: trail_poi
     features:
