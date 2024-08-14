@@ -324,6 +324,8 @@ layers:
             tag_value: bicycle
           - key: boundary
             tag_value: boundary
+          - key: cabins
+            tag_value: cabins
           - key: canoe
             tag_value: canoe
           - key: caravans
@@ -412,6 +414,8 @@ layers:
             tag_value: ski:nordic
           - key: snowmobile
             tag_value: snowmobile
+          - key: static_caravans
+            tag_value: static_caravans
           - key: survey:date
             tag_value: survey:date
           - key: tents
