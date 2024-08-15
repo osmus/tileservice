@@ -194,12 +194,18 @@ layers:
             tag_value: oneway:foot
           - key: oneway:horse
             tag_value: oneway:horse
+          - key: oneway:inline_skates
+            tag_value: oneway:inline_skates
           - key: oneway:motor_vehicle
             tag_value: oneway:motor_vehicle
           - key: oneway:mtb
             tag_value: oneway:mtb
           - key: oneway:portage
             tag_value: oneway:portage
+          - key: oneway:ski
+            tag_value: oneway:ski
+          - key: oneway:ski:nordic
+            tag_value: oneway:ski:nordic
           - key: oneway:snowmobile
             tag_value: oneway:snowmobile
           - key: oneway:vehicle
