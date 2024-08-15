@@ -59,6 +59,7 @@ layers:
                   dog: __any__
                   foot: __any__
                   horse: __any__
+                  inline_skates: __any__
                   mtb: __any__
                   piste:type: __any__
                   ski:nordic: __any__
