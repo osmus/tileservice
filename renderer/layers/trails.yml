@@ -278,7 +278,7 @@ layers:
     features:
       # gather trails as points so we can render markers for them at any zoom level
       - source: osm
-        geometry: point_on_line
+        geometry: line_centroid
         min_zoom: 7
         include_when:
           __all__:
