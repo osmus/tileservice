@@ -279,7 +279,7 @@ layers:
     features:
       # gather trails as points so we can render markers for them at any zoom level
       - source: osm
-        geometry: line_centroid
+        geometry: point_on_line
         min_zoom: 7
         include_when:
           __all__:
@@ -289,7 +289,6 @@ layers:
               - FIXME: __any__
               - todo: __any__
               - TODO: __any__
-              - route: ferry
         attributes: *trail_attributes
   - id: trail_poi
     features:
@@ -413,6 +412,8 @@ layers:
             tag_value: ref
           - key: reservation
             tag_value: reservation
+          - key: route
+            tag_value: route
           - key: shelter_type
             tag_value: shelter_type
           - key: shower
@@ -469,7 +470,7 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: point
-        min_zoom: 8
+        min_zoom: 7
         include_when:
           canoe: put_in
           leisure: slipway
@@ -477,7 +478,7 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: point
-        min_zoom: 10
+        min_zoom: 7
         include_when:
           &waterway_barriers_filter
           natural: beaver_dam
@@ -488,17 +489,17 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: point_on_line
-        min_zoom: 10
+        min_zoom: 7
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: polygon_centroid_if_convex
-        min_zoom: 10
+        min_zoom: 7
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: line_centroid
-        min_zoom: 10
+        min_zoom: 7
         include_when:
           - __all__:
             - lock: yes
@@ -508,8 +509,14 @@ layers:
               - stream
         attributes: *poi_attributes
       - source: osm
+        geometry: point_on_line
+        min_zoom: 7
+        include_when:
+          - route: ferry
+        attributes: *poi_attributes
+      - source: osm
         geometry: point
-        min_zoom: 10
+        min_zoom: 7
         include_when:
           - __all__:
             - man_made: monitoring_station
