@@ -512,7 +512,7 @@ layers:
         geometry: point_on_line
         min_zoom: 7
         include_when:
-          - __all__
+          - __all__:
             - route: ferry
             - __any__: *trails_filter
         attributes: *poi_attributes
