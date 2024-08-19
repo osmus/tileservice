@@ -567,6 +567,52 @@ layers:
         min_size: 0.5
         include_when: *parks_filter
         attributes: *poi_attributes
+  # gather barriers as lines and areas for rendering
+  - id: barrier
+    features:
+      - source: osm
+        geometry: line
+        min_zoom: 7
+        min_size: 0.5
+        include_when:
+          &barrier_filter
+          - man_made: breakwater
+          - natural: beaver_dam
+          - waterway:
+            - dam
+            - weir
+        attributes:
+          &barrier_attributes
+          - key: OSM_ID
+            value: "${feature.id}"
+          - key: OSM_TYPE
+            value: "${feature.osm_type}"
+          - key: OSM_VERSION
+            value: "${feature.osm_version}"
+          - key: OSM_TIMESTAMP
+            value: "${feature.osm_timestamp}"
+          - key: OSM_CHANGESET
+            value: "${feature.osm_changeset}"
+          - key: OSM_USER_NAME
+            value: "${feature.osm_user_name}"
+          - key: canoe
+            tag_value: canoe
+          - key: intermittent
+            tag_value: intermittent
+          - key: man_made
+            tag_value: man_made
+          - key: portage
+            tag_value: portage
+          - key: natural
+            tag_value: natural
+          - key: waterway
+            tag_value: waterway
+      - source: osm
+        geometry: polygon
+        min_zoom: 7
+        min_size: 0.5
+        include_when: *barrier_filter
+        attributes: *barrier_attributes
 args:
   area:
     description: Geofabrik area to download
