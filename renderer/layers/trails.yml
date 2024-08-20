@@ -567,11 +567,11 @@ layers:
         min_size: 0.5
         include_when: *parks_filter
         attributes: *poi_attributes
-  # gather barriers as lines and areas for rendering
-  - id: barrier
+  # gather barriers as areas for rendering
+  - id: barrier_area
     features:
       - source: osm
-        geometry: line
+        geometry: polygon
         min_zoom: 7
         min_size: 0.5
         include_when:
@@ -607,8 +607,11 @@ layers:
             tag_value: natural
           - key: waterway
             tag_value: waterway
+  # gather barriers as lines for rendering
+  - id: barrier_line
+    features:
       - source: osm
-        geometry: polygon
+        geometry: line
         min_zoom: 7
         min_size: 0.5
         include_when: *barrier_filter
