@@ -277,9 +277,9 @@ layers:
             tag_value: width
   - id: trail_centerpoint
     features:
-      # gather trails as points so we can render markers for them at any zoom level
+      # gather trail issues as points so we can render markers for them at any zoom level
       - source: osm
-        geometry: point_on_line
+        geometry: line_midpoint
         min_zoom: 7
         include_when:
           __all__:
@@ -488,7 +488,7 @@ layers:
             - weir
         attributes: *poi_attributes
       - source: osm
-        geometry: point_on_line
+        geometry: line_midpoint
         min_zoom: 7
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
@@ -498,7 +498,7 @@ layers:
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
-        geometry: line_centroid
+        geometry: line_midpoint
         min_zoom: 7
         include_when:
           - __all__:
@@ -509,7 +509,7 @@ layers:
               - stream
         attributes: *poi_attributes
       - source: osm
-        geometry: point_on_line
+        geometry: line_midpoint
         min_zoom: 7
         include_when:
           - __all__:
