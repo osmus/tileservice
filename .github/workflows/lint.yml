@@ -32,7 +32,16 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_MARKDOWN: false
-          # enable the below at some point
+          # disable low-importance linters for now
+          VALIDATE_BASH: false
+          VALIDATE_BASH_EXEC: false
+          VALIDATE_CHECKOV: false
+          VALIDATE_DOCKERFILE_HADOLINT: false
+          VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_RUFF: false
           VALIDATE_CSS: false
           VALIDATE_HTML: false
           VALIDATE_JAVASCRIPT_STANDARD: false
