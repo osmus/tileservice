@@ -26,22 +26,10 @@ jobs:
       - name: Super-linter
         uses: super-linter/super-linter@v6.5.0  # x-release-please-version
         env:
+          FILTER_REGEX_INCLUDE: ^renderer/
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # disable nitpicky linters
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_MARKDOWN: false
-          # disable low-importance linters for now
-          VALIDATE_BASH: false
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_DOCKERFILE_HADOLINT: false
-          VALIDATE_PYTHON_BLACK: false
-          VALIDATE_PYTHON_FLAKE8: false
-          VALIDATE_PYTHON_ISORT: false
-          VALIDATE_PYTHON_MYPY: false
-          VALIDATE_PYTHON_RUFF: false
-          VALIDATE_CSS: false
-          VALIDATE_HTML: false
-          VALIDATE_JAVASCRIPT_STANDARD: false
