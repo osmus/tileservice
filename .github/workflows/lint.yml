@@ -26,9 +26,11 @@ jobs:
       - name: Super-linter
         uses: super-linter/super-linter@v6.5.0  # x-release-please-version
         env:
-          FILTER_REGEX_INCLUDE: ^renderer/
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_INCLUDE: ^renderer/
+          # need to disable chekov manually since it ignores FILTER_REGEX_INCLUDE
+          VALIDATE_CHECKOV: false
           # disable nitpicky linters
           VALIDATE_JSCPD: false
           VALIDATE_NATURAL_LANGUAGE: false
