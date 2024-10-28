@@ -12,7 +12,7 @@ layers:
       - source: osm
         geometry: line
         min_zoom: 5
-        min_size: 0.5
+        min_size: 1
         include_when:
           &trails_filter
           # gather any roads, paths, or ferries that are explicitly marked as trails or portages
@@ -564,7 +564,7 @@ layers:
       - source: osm
         geometry: polygon
         min_zoom: 4
-        min_size: 0.5
+        min_size: 1
         include_when: *parks_filter
         attributes: *poi_attributes
   # gather barriers as areas for rendering
@@ -573,7 +573,7 @@ layers:
       - source: osm
         geometry: polygon
         min_zoom: 7
-        min_size: 0.5
+        min_size: 1
         include_when:
           &barrier_filter
           - man_made: breakwater
@@ -613,7 +613,7 @@ layers:
       - source: osm
         geometry: line
         min_zoom: 7
-        min_size: 0.5
+        min_size: 1
         include_when: *barrier_filter
         attributes: *barrier_attributes
 args:
