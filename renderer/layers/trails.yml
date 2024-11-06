@@ -566,7 +566,7 @@ layers:
         attributes:
           <<: *poi_attributes
           BBOX: ${feature.bbox}
-          BBOX_PROJ_AREA: ${feature.bbox.area('z0 px2')}
+          BBOX_AREA_Z0_PX2: ${feature.bbox.area('z0 px2')}
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
