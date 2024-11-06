@@ -13,8 +13,7 @@ layers:
         geometry: line
         min_zoom: 5
         min_size: 1
-        include_when:
-          &trails_filter
+        include_when: &trails_filter
           # gather any roads, paths, or ferries that are explicitly marked as trails or portages
           - __all__:
             - __any__:
@@ -87,8 +86,7 @@ layers:
               - railway: platform
               # exclude anything explicitly marked as not a trail
               - trail: no
-        attributes:
-          &trail_attributes
+        attributes: &trail_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -308,8 +306,7 @@ layers:
             - wilderness_hut
             - viewpoint
           shelter_type: lean_to
-        attributes:
-          &poi_attributes
+        attributes: &poi_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
@@ -481,8 +478,7 @@ layers:
       - source: osm
         geometry: point
         min_zoom: 7
-        include_when:
-          &waterway_barriers_filter
+        include_when: &waterway_barriers_filter
           natural: beaver_dam
           waterway:
             - dam
@@ -541,8 +537,7 @@ layers:
         geometry: polygon_centroid_if_convex
         min_zoom: 4
         min_size: 15
-        include_when:
-          &parks_filter
+        include_when: &parks_filter
           __all__:
             - name: __any__
             - __any__:
@@ -576,15 +571,13 @@ layers:
         geometry: polygon
         min_zoom: 7
         min_size: 1
-        include_when:
-          &barrier_filter
+        include_when: &barrier_filter
           - man_made: breakwater
           - natural: beaver_dam
           - waterway:
             - dam
             - weir
-        attributes:
-          &barrier_attributes
+        attributes: &barrier_attributes
           - key: OSM_ID
             value: "${feature.id}"
           - key: OSM_TYPE
