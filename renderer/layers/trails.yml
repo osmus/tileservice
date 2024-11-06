@@ -563,7 +563,10 @@ layers:
         min_zoom: 4
         min_size: 1
         include_when: *parks_filter
-        attributes: *poi_attributes
+        attributes:
+          <<: *poi_attributes
+          BBOX: ${feature.bbox}
+          BBOX_PROJ_AREA: ${feature.bbox.area('z0 px2')}
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
