@@ -102,7 +102,7 @@ layers:
           - key: OSM_USER_NAME
             value: "${feature.osm_user_name}"
           - key: LENGTH_M
-            value: "${feature.length('m'}"
+            value: ${feature.length('m')}
           - key: access
             tag_value: access
           - key: atv
