@@ -547,7 +547,9 @@ layers:
               - boundary:
                 - national_park
                 - protected_area
-        attributes: *poi_attributes
+        attributes:
+          <<: *poi_attributes
+          BBOX_AREA_Z0_PX2: ${feature.bbox.area('z0 px2')}
       # gather trees at low zooms
       - source: osm
         geometry: point
@@ -566,7 +568,6 @@ layers:
         attributes:
           <<: *poi_attributes
           BBOX: ${feature.bbox}
-          BBOX_AREA_Z0_PX2: ${feature.bbox.area('z0 px2')}
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
