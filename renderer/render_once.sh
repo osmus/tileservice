@@ -93,6 +93,10 @@ done
 echo 'Waiting for all background jobs to finish'
 wait
 
+echo 'Regenerating taginfo project file'
+cat "$DIR/languages.txt" | sed -E 's/([-A-Za-z]+)/{"key": "name:\1", "object_types": ["node", "way", "relation", "area"]}/g' | jq -s '.' > "$DIR/languages.json"
+jq -s '.[0].tags += .[1] | .[0]' "$DIR/taginfo_template.json" "$DIR/languages.json" > "$DIR/../static/taginfo.json"
+
 echo 'Invalidating the CDN cache'
 aws cloudfront create-invalidation --distribution-id E1SJ64GZNQSV8M --invalidation-batch "{\"Paths\": {\"Quantity\": 1, \"Items\": [\"/*\"]}, \"CallerReference\": \"invalidation-$DATE\"}"
 
