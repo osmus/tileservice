@@ -319,8 +319,14 @@ layers:
             value: "${feature.osm_changeset}"
           - key: OSM_USER_NAME
             value: "${feature.osm_user_name}"
-          - key: BBOX
-            value: ${feature.bbox}
+          - key: MIN_LAT
+            value: ${feature.min_lat}
+          - key: MIN_LON
+            value: ${feature.min_lon}
+          - key: MAX_LAT
+            value: ${feature.max_lat}
+          - key: MAX_LON
+            value: ${feature.max_lon}
           - key: BBOX_AREA_Z0_PX2
             value: ${feature.bbox.area('z0 px2')}
           - key: access
