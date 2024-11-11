@@ -618,10 +618,10 @@ layers:
         geometry: line
         min_zoom: 7
         min_size: 1
-        include_when: 
+        include_when:
           - __all__:
             - __any__: *barrier_filter
-            - __not_: *area_filter
+            - __not__: *area_filter
         attributes: *barrier_attributes
 args:
   area:
