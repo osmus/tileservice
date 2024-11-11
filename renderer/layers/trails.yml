@@ -319,6 +319,10 @@ layers:
             value: "${feature.osm_changeset}"
           - key: OSM_USER_NAME
             value: "${feature.osm_user_name}"
+          - key: BBOX
+            value: ${feature.bbox}
+          - key: BBOX_AREA_Z0_PX2
+            value: ${feature.bbox.area('z0 px2')}
           - key: access
             tag_value: access
           - key: amenity
@@ -547,9 +551,7 @@ layers:
               - boundary:
                 - national_park
                 - protected_area
-        attributes:
-          <<: *poi_attributes
-          BBOX_AREA_Z0_PX2: ${feature.bbox.area('z0 px2')}
+        attributes: *poi_attributes
       # gather trees at low zooms
       - source: osm
         geometry: point
@@ -565,9 +567,7 @@ layers:
         min_zoom: 4
         min_size: 1
         include_when: *parks_filter
-        attributes:
-          <<: *poi_attributes
-          BBOX: ${feature.bbox}
+        attributes: *poi_attributes
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
