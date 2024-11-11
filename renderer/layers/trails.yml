@@ -88,17 +88,17 @@ layers:
               - trail: no
         attributes: &trail_attributes
           - key: OSM_ID
-            value: "${feature.id}"
+            value: ${feature.id}
           - key: OSM_TYPE
-            value: "${feature.osm_type}"
+            value: ${feature.osm_type}
           - key: OSM_VERSION
-            value: "${feature.osm_version}"
+            value: ${feature.osm_version}
           - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
+            value: ${feature.osm_timestamp}
           - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
+            value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
+            value: ${feature.osm_user_name}
           - key: LENGTH_M
             value: ${feature.length('m')}
           - key: access
@@ -308,17 +308,17 @@ layers:
           shelter_type: lean_to
         attributes: &poi_attributes
           - key: OSM_ID
-            value: "${feature.id}"
+            value: ${feature.id}
           - key: OSM_TYPE
-            value: "${feature.osm_type}"
+            value: ${feature.osm_type}
           - key: OSM_VERSION
-            value: "${feature.osm_version}"
+            value: ${feature.osm_version}
           - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
+            value: ${feature.osm_timestamp}
           - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
+            value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
+            value: ${feature.osm_user_name}
           - key: MIN_LAT
             value: ${feature.min_lat}
           - key: MIN_LON
@@ -594,17 +594,17 @@ layers:
               - type: multipolygon
         attributes: &barrier_attributes
           - key: OSM_ID
-            value: "${feature.id}"
+            value: ${feature.id}
           - key: OSM_TYPE
-            value: "${feature.osm_type}"
+            value: ${feature.osm_type}
           - key: OSM_VERSION
-            value: "${feature.osm_version}"
+            value: ${feature.osm_version}
           - key: OSM_TIMESTAMP
-            value: "${feature.osm_timestamp}"
+            value: ${feature.osm_timestamp}
           - key: OSM_CHANGESET
-            value: "${feature.osm_changeset}"
+            value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
-            value: "${feature.osm_user_name}"
+            value: ${feature.osm_user_name}
           - key: canoe
             tag_value: canoe
           - key: intermittent
