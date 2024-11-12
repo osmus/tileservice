@@ -327,8 +327,8 @@ layers:
             value: ${feature.max_lat}
           - key: MAX_LON
             value: ${feature.max_lon}
-          - key: BBOX_AREA_Z0_PX2
-            value: ${feature.bbox.area('z0 px2')}
+          - key: AREA_Z0_PX2
+            value: ${feature.area('z0 px2')}
           - key: access
             tag_value: access
           - key: amenity
