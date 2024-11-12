@@ -546,7 +546,7 @@ layers:
       - source: osm
         geometry: polygon_centroid_if_convex
         min_zoom: 4
-        min_size: 1
+        min_size: 5
         include_when: &parks_filter
           __all__:
             - name: __any__
