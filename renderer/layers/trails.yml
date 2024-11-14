@@ -99,8 +99,14 @@ layers:
             value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
             value: ${feature.osm_user_name}
-          - key: LENGTH_M
-            value: ${feature.length('m')}
+          - key: MIN_LAT
+            value: ${feature.min_lat}
+          - key: MIN_LON
+            value: ${feature.min_lon}
+          - key: MAX_LAT
+            value: ${feature.max_lat}
+          - key: MAX_LON
+            value: ${feature.max_lon}
           - key: access
             tag_value: access
           - key: atv
