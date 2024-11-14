@@ -319,14 +319,6 @@ layers:
             value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
             value: ${feature.osm_user_name}
-          - key: MIN_LAT
-            value: ${feature.min_lat}
-          - key: MIN_LON
-            value: ${feature.min_lon}
-          - key: MAX_LAT
-            value: ${feature.max_lat}
-          - key: MAX_LON
-            value: ${feature.max_lon}
           - key: AREA_Z0_PX2
             value: ${feature.area('z0 px2')}
           - key: access
@@ -573,7 +565,21 @@ layers:
         min_zoom: 4
         min_size: 1
         include_when: *parks_filter
-        attributes: *poi_attributes
+        attributes:
+          - key: OSM_ID
+            value: ${feature.id}
+          - key: OSM_TYPE
+            value: ${feature.osm_type}
+          - key: MIN_LAT
+            value: ${feature.min_lat}
+          - key: MIN_LON
+            value: ${feature.min_lon}
+          - key: MAX_LAT
+            value: ${feature.max_lat}
+          - key: MAX_LON
+            value: ${feature.max_lon}
+          - key: name
+            tag_value: name
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
