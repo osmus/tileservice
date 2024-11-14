@@ -399,6 +399,8 @@ layers:
             tag_value: name
           - key: natural
             tag_value: natural
+          - key: network
+            tag_value: network
           - key: noname
             tag_value: noname
           - key: noref
