@@ -389,8 +389,6 @@ layers:
             tag_value: man_made
           - key: monitoring:water_level
             tag_value: monitoring:water_level
-          - key: monitoring:tide_gauge
-            tag_value: monitoring:tide_gauge
           - key: monitoring:flow_rate
             tag_value: monitoring:flow_rate
           - key: mtb
@@ -539,7 +537,6 @@ layers:
             # filter to surface water monitoring stations
             - __any__:
               monitoring:water_level: yes
-              monitoring:tide_gauge: yes
               monitoring:flow_rate: yes
         attributes: *poi_attributes
       # gather protected areas as points
