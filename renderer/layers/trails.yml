@@ -73,9 +73,6 @@ layers:
                   - footway: __any__
               - __all__:
                 - highway: cycleway
-                - __not__:
-                  # ignore bike lanes that are part of roads
-                  - cycleway: lane
             - __not__:
               # exclude anything indoors
               - indoor: __any__
@@ -86,6 +83,8 @@ layers:
               - railway: platform
               # exclude anything explicitly marked as not a trail
               - trail: no
+              # exclude paths that go along roads
+              - is_sidepath: yes
         attributes: &trail_attributes
           - key: OSM_ID
             value: ${feature.id}
