@@ -1,0 +1,15 @@
+{
+  "data_format": 1,
+  "project": {
+    "name": "OpenStreetMap U.S. Tile Service",
+    "description": "A vector tile server for community projects.",
+    "project_url": "https://github.com/osmus/tileservice/",
+    "doc_url": "https://tile.ourmap.us/",
+    "icon_url": "https://openstreetmap.us/img/osmus-logo.svg",
+    "contact_name": "OpenStreetMap U.S.",
+    "contact_email": "team@openstreetmap.us"
+  },
+  "tags": [
+    {"key": "name", "object_types": ["node", "way", "relation", "area"]}
+  ]
+}
