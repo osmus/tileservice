@@ -287,7 +287,7 @@ layers:
         geometry: line_midpoint
         min_zoom: 7
         include_when:
-          __all__:
+          - __all__:
             - __any__: *trails_filter
             - __any__:
               - fixme: __any__
@@ -544,7 +544,7 @@ layers:
         min_zoom: 4
         min_size: 5
         include_when: &parks_filter
-          __all__:
+          - __all__:
             - name: __any__
             - __any__:
               - leisure:
@@ -553,6 +553,8 @@ layers:
               - boundary:
                 - national_park
                 - protected_area
+            - __not__:
+              - protected_area: historic_district
         attributes: *poi_attributes
       # gather trees at low zooms
       - source: osm
