@@ -48,7 +48,7 @@ docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 	--storage=ram --nodemap-type=array \
 	--max-point-buffer=4 \
 	--building_merge_z13=false \
-	--languages=*
+	--languages='*'
 
 # Check if the file exists and is at least 50GB
 if [[ ! -f "$PLANET" ]]; then
