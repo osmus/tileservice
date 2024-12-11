@@ -584,8 +584,14 @@ layers:
             value: ${feature.max_lat}
           - key: MAX_LON
             value: ${feature.max_lon}
+          - key: access
+            tag_value: access
+          - key: boundary
+            tag_value: boundary
           - key: name
             tag_value: name
+          - key: protected_area
+            tag_value: protected_area
   # gather barriers as areas for rendering
   - id: barrier_area
     features:
