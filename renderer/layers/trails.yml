@@ -336,6 +336,8 @@ layers:
             tag_value: backcountry
           - key: bicycle
             tag_value: bicycle
+          - key: boat
+            tag_value: boat
           - key: boundary
             tag_value: boundary
           - key: cabins
