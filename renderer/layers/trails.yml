@@ -218,6 +218,38 @@ layers:
             tag_value: oneway:vehicle
           - key: oneway:wheelchair
             tag_value: oneway:wheelchair
+          - key: oneway:conditional
+            tag_value: oneway:conditional
+          - key: oneway:atv:conditional
+            tag_value: oneway:atv:conditional
+          - key: oneway:boat:conditional
+            tag_value: oneway:boat:conditional
+          - key: oneway:bicycle:conditional
+            tag_value: oneway:bicycle:conditional
+          - key: oneway:canoe:conditional
+            tag_value: oneway:canoe:conditional
+          - key: oneway:foot:conditional
+            tag_value: oneway:foot:conditional
+          - key: oneway:horse:conditional
+            tag_value: oneway:horse:conditional
+          - key: oneway:inline_skates:conditional
+            tag_value: oneway:inline_skates:conditional
+          - key: oneway:motor_vehicle:conditional
+            tag_value: oneway:motor_vehicle:conditional
+          - key: oneway:portage:conditional
+            tag_value: oneway:portage:conditional
+          - key: oneway:mtb:conditional
+            tag_value: oneway:mtb:conditional
+          - key: oneway:ski:conditional
+            tag_value: oneway:ski:conditional
+          - key: oneway:ski:nordic:conditional
+            tag_value: oneway:ski:nordic:conditional
+          - key: oneway:snowmobile:conditional
+            tag_value: oneway:snowmobile:conditional
+          - key: oneway:vehicle:conditional
+            tag_value: oneway:vehicle:conditional
+          - key: oneway:wheelchair:conditional
+            tag_value: oneway:wheelchair:conditional
           - key: open_water
             tag_value: open_water
           - key: operator
