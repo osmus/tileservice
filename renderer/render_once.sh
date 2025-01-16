@@ -82,7 +82,10 @@ for file in "$DIR/layers/"*.yml; do
 
 	echo "Uploading $layer_name to s3 bucket in background"
 	{
+		# upload to AWS S3 bucket
 		aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
+		# also upload the same data to a Cloudflare R2 bucket (testing this as a new hosting option)
+		env AWS_PROFILE=osmus-r2 aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
 		rm -rf "$WORKING_DIR/data/$layer_name.pmtiles"
 	} &
 done
