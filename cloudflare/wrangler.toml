@@ -1,0 +1,12 @@
+name = "tileservice"
+main = "src/index.ts"
+compatibility_date = "2024-09-02"
+minify = false
+
+r2_buckets  = [
+  { binding = "BUCKET", bucket_name = "osmus-tile", preview_bucket_name = "osmus-tile" }
+]
+
+[vars]
+ALLOWED_ORIGINS = "*"
+CACHE_CONTROL = "public, max-age=3600"
