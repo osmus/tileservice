@@ -14,6 +14,8 @@ interface Env {
   CACHE_CONTROL?: string;
   PMTILES_PATH?: string;
   PUBLIC_HOSTNAME?: string;
+  PER_USER_RATE_LIMITER: any;
+  PER_ORIGIN_RATE_LIMITER: any;
 }
 
 class KeyNotFoundError extends Error {}
@@ -55,10 +57,7 @@ const tile_path = (
   return { ok: false, name: "", tile: [0, 0, 0], ext: "" };
 };
 
-async function nativeDecompress(
-  buf: ArrayBuffer,
-  compression: Compression,
-): Promise<ArrayBuffer> {
+async function nativeDecompress(buf: ArrayBuffer, compression: Compression): Promise<ArrayBuffer> {
   if (compression === Compression.None || compression === Compression.Unknown) {
     return buf;
   }
@@ -91,13 +90,10 @@ class R2Source implements Source {
     signal?: AbortSignal,
     etag?: string,
   ): Promise<RangeResponse> {
-    const resp = await this.env.BUCKET.get(
-      pmtiles_path(this.archiveName, this.env.PMTILES_PATH),
-      {
-        range: { offset: offset, length: length },
-        onlyIf: { etagMatches: etag },
-      },
-    );
+    const resp = await this.env.BUCKET.get(pmtiles_path(this.archiveName, this.env.PMTILES_PATH), {
+      range: { offset: offset, length: length },
+      onlyIf: { etagMatches: etag },
+    });
     if (!resp) {
       throw new KeyNotFoundError("Archive not found");
     }
@@ -119,13 +115,10 @@ class R2Source implements Source {
 }
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext,
-  ): Promise<Response> {
-    if (request.method.toUpperCase() === "POST")
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    if (request.method.toUpperCase() === "POST") {
       return new Response(undefined, { status: 405 });
+    }
 
     const url = new URL(request.url);
     const { ok, name, tile, ext } = tile_path(url.pathname);
@@ -134,6 +127,23 @@ export default {
 
     if (!ok) {
       return new Response("Invalid URL", { status: 404 });
+    }
+
+    // Enforce per-user and per-origin rate limits
+
+    // NOTE: IP address isn't necessarily unique per user (especially on mobile networks)
+    // but it's the best we can do. Per-user limits should be set generously to avoid
+    // frustrating users who share their IP with lots of other users.
+    const ipAddress = request.headers.get("cf-connecting-ip") || "";
+    const userLimiterResult = await env.PER_USER_RATE_LIMITER.limit({ key: ipAddress });
+    if (!userLimiterResult.success) {
+      return new Response(`Rate limit exceeded for IP ${ipAddress}`, { status: 429 });
+    }
+
+    const origin = request.headers.get("origin") || "";
+    const originLimiterResult = await env.PER_ORIGIN_RATE_LIMITER.limit({ key: origin });
+    if (!originLimiterResult.success) {
+      return new Response(`Rate limit exceeded for Origin ${origin}`, { status: 429 });
     }
 
     let allowedOrigin = "";
@@ -148,8 +158,9 @@ export default {
     const cached = await cache.match(request.url);
     if (cached) {
       const respHeaders = new Headers(cached.headers);
-      if (allowedOrigin)
+      if (allowedOrigin) {
         respHeaders.set("Access-Control-Allow-Origin", allowedOrigin);
+      }
       respHeaders.set("Vary", "Origin");
 
       return new Response(cached.body, {
@@ -163,10 +174,7 @@ export default {
       cacheableHeaders: Headers,
       status: number,
     ) => {
-      cacheableHeaders.set(
-        "Cache-Control",
-        env.CACHE_CONTROL || "public, max-age=86400",
-      );
+      cacheableHeaders.set("Cache-Control", env.CACHE_CONTROL || "public, max-age=86400");
 
       const cacheable = new Response(body, {
         headers: cacheableHeaders,
@@ -176,8 +184,9 @@ export default {
       ctx.waitUntil(cache.put(request.url, cacheable));
 
       const respHeaders = new Headers(cacheableHeaders);
-      if (allowedOrigin)
+      if (allowedOrigin) {
         respHeaders.set("Access-Control-Allow-Origin", allowedOrigin);
+      }
       respHeaders.set("Vary", "Origin");
       return new Response(body, { headers: respHeaders, status: status });
     };
@@ -190,9 +199,7 @@ export default {
 
       if (!tile) {
         cacheableHeaders.set("Content-Type", "application/json");
-        const t = await p.getTileJson(
-          `https://${env.PUBLIC_HOSTNAME || url.hostname}/${name}`,
-        );
+        const t = await p.getTileJson(`https://${env.PUBLIC_HOSTNAME || url.hostname}/${name}`);
         return cacheableResponse(JSON.stringify(t), cacheableHeaders, 200);
       }
 
