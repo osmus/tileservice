@@ -84,8 +84,13 @@ for file in "$DIR/layers/"*.yml; do
 	{
 		# upload to AWS S3 bucket
 		aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
+
 		# also upload the same data to a Cloudflare R2 bucket (testing this as a new hosting option)
-		env AWS_PROFILE=osmus-r2 aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
+		# env AWS_PROFILE=osmus-r2 aws s3 cp "$WORKING_DIR/data/$layer_name.pmtiles" s3://osmus-tile/ --only-show-errors
+		# NOTE: the above doesn't work right now due to an S3/R2 compatibility issue; as a workaround
+		# we'll use rclone for now:
+		rclone copyto "$WORKING_DIR/data/$layer_name.pmtiles" "osmus-r2://osmus-tile/$layer_name.pmtiles" --s3-no-check-bucket
+
 		rm -rf "$WORKING_DIR/data/$layer_name.pmtiles"
 	} &
 done
