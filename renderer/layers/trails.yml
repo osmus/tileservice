@@ -484,6 +484,8 @@ layers:
             tag_value: waterway
           - key: wheelchair
             tag_value: wheelchair
+          - key: wildlife_refuge
+            tag_value: wildlife_refuge
       # gather POIs mapped as areas for certain types
       - source: osm
         geometry: polygon_centroid_if_convex
