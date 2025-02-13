@@ -8,14 +8,17 @@ r2_buckets  = [
 ]
 
 [vars]
-# Comma-separated list of Origins to allow; the special value "*" means allow any Origin
+# Newline-separated list of Origins to allow; "*" is treated as a wildcard
+# (matches zero or more chars)
 ALLOWED_ORIGINS = "*"
 
-# Comma-separated list of Origins which are not rate limited.
-# This is commented out because we have chosen to manage the list in the Cloudflare
-# Dashboard rather than storing it in the public repository.
-# Deploys should be done using `wrangler deploy --keep-vars` to avoid overwriting
-# the stored value.
+# Newline-separated list of Origins which are not rate limited ("*" is treated a
+# wildcard, like above).
+#
+# This is commented out because we have chosen to manage the list in the
+# Cloudflare Dashboard rather than storing it in the public repository. Deploys
+# should be done using `wrangler deploy --keep-vars` to avoid overwriting the
+# stored value.
 # FAVORED_ORIGINS = ""
 
 # Value of the Cache-Control header to return

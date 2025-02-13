@@ -21,6 +21,11 @@ interface Env {
 
 class KeyNotFoundError extends Error {}
 
+const regexEscape = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const globToRegex = (glob: string): RegExp => {
+  return new RegExp("^" + glob.split("*").map(regexEscape).join(".*") + "$");
+}
+
 const pmtiles_path = (name: string, setting?: string): string => {
   if (setting) {
     return setting.replaceAll("{name}", name);
@@ -130,9 +135,12 @@ export default {
       return new Response("Invalid URL", { status: 404 });
     }
 
+    // Check if this request's Origin is in the allowed origins list. If no
+    // Origin header was provided, the request will be allowed only if the
+    // allowed list contains an entry "*" (which permits any Origin).
     const origin = request.headers.get("Origin");
-    const allowedOrigins = env.ALLOWED_ORIGINS?.split(",") ?? [];
-    const isAllowed = (origin && allowedOrigins.includes(origin)) || allowedOrigins.includes("*");
+    const allowedOrigins = env.ALLOWED_ORIGINS?.split("\n").filter(s => s.length > 0).map(globToRegex) ?? [];
+    const isAllowed = allowedOrigins.some(regex => regex.test(origin ?? ""));
 
     if (!isAllowed) {
       return new Response("Origin not allowed", { status: 403 });
@@ -140,17 +148,22 @@ export default {
 
     // Enforce per-user and per-origin rate limits
 
-    // NOTE: IP address isn't necessarily unique per user (especially on mobile networks)
-    // but it's the best we can do. Per-user limits should be set generously to avoid
-    // frustrating users who share their IP with lots of other users.
+    // NOTE: IP address isn't necessarily unique per user (especially on mobile
+    // networks) but it's the best we can do. Per-user limits should be set
+    // generously to avoid frustrating users who share their IP with lots of
+    // other users.
     const ipAddress = request.headers.get("cf-connecting-ip");
     const userLimiterResult = await env.PER_USER_RATE_LIMITER.limit({ key: ipAddress ?? "" });
     if (!userLimiterResult.success) {
       return new Response(`Rate limit exceeded for IP ${ipAddress}`, { status: 429 });
     }
 
-    const favoredOrigins = env.FAVORED_ORIGINS?.split(",") ?? [];
-    const isFavored = origin && favoredOrigins.includes(origin);
+    // Check if this request's Origin is favored (not subject to per-Origin
+    // rate limiting). Only requests that send an Origin header can be favored;
+    // requests that omit the Origin header are rate-limited together in one
+    // bucket.
+    const favoredOrigins = env.FAVORED_ORIGINS?.split("\n").filter(s => s.length > 0).map(globToRegex) ?? [];
+    const isFavored = origin && favoredOrigins.some(regex => regex.test(origin));
 
     // Only enforce per-origin rate limiting if the Origin isn't on the Favored list
     if (!isFavored) {
