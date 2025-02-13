@@ -5,11 +5,7 @@
   "scripts": {
     "start": "wrangler dev",
     "deploy": "wrangler deploy --keep-vars",
-    "test": "tsx ../shared/index.test.ts",
-    "tsc": "tsc --watch",
-    "build": "wrangler deploy --outdir dist --dry-run",
-    "biome": "biome check --config-path=../../js/ src/index.ts --apply",
-    "biome-check": "biome check --config-path=../../js src/index.ts"
+    "build": "wrangler deploy --outdir dist --dry-run"
   },
   "dependencies": {
     "pmtiles": "^4.2.1"
