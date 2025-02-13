@@ -8,7 +8,17 @@ r2_buckets  = [
 ]
 
 [vars]
+# Comma-separated list of Origins to allow; the special value "*" means allow any Origin
 ALLOWED_ORIGINS = "*"
+
+# Comma-separated list of Origins which are not rate limited.
+# This is commented out because we have chosen to manage the list in the Cloudflare
+# Dashboard rather than storing it in the public repository.
+# Deploys should be done using `wrangler deploy --keep-vars` to avoid overwriting
+# the stored value.
+# FAVORED_ORIGINS = ""
+
+# Value of the Cache-Control header to return
 CACHE_CONTROL = "public, max-age=3600"
 
 # Rate limiter configuration

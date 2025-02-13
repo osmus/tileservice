@@ -12,6 +12,7 @@ interface Env {
   ALLOWED_ORIGINS?: string;
   BUCKET: R2Bucket;
   CACHE_CONTROL?: string;
+  FAVORED_ORIGINS?: string;
   PMTILES_PATH?: string;
   PUBLIC_HOSTNAME?: string;
   PER_USER_RATE_LIMITER: any;
@@ -129,37 +130,42 @@ export default {
       return new Response("Invalid URL", { status: 404 });
     }
 
+    const origin = request.headers.get("Origin");
+    const allowedOrigins = env.ALLOWED_ORIGINS?.split(",") ?? [];
+    const isAllowed = (origin && allowedOrigins.includes(origin)) || allowedOrigins.includes("*");
+
+    if (!isAllowed) {
+      return new Response("Origin not allowed", { status: 403 });
+    }
+
     // Enforce per-user and per-origin rate limits
 
     // NOTE: IP address isn't necessarily unique per user (especially on mobile networks)
     // but it's the best we can do. Per-user limits should be set generously to avoid
     // frustrating users who share their IP with lots of other users.
-    const ipAddress = request.headers.get("cf-connecting-ip") || "";
-    const userLimiterResult = await env.PER_USER_RATE_LIMITER.limit({ key: ipAddress });
+    const ipAddress = request.headers.get("cf-connecting-ip");
+    const userLimiterResult = await env.PER_USER_RATE_LIMITER.limit({ key: ipAddress ?? "" });
     if (!userLimiterResult.success) {
       return new Response(`Rate limit exceeded for IP ${ipAddress}`, { status: 429 });
     }
 
-    const origin = request.headers.get("origin") || "";
-    const originLimiterResult = await env.PER_ORIGIN_RATE_LIMITER.limit({ key: origin });
-    if (!originLimiterResult.success) {
-      return new Response(`Rate limit exceeded for Origin ${origin}`, { status: 429 });
-    }
+    const favoredOrigins = env.FAVORED_ORIGINS?.split(",") ?? [];
+    const isFavored = origin && favoredOrigins.includes(origin);
 
-    let allowedOrigin = "";
-    if (typeof env.ALLOWED_ORIGINS !== "undefined") {
-      for (const o of env.ALLOWED_ORIGINS.split(",")) {
-        if (o === request.headers.get("Origin") || o === "*") {
-          allowedOrigin = o;
-        }
+    // Only enforce per-origin rate limiting if the Origin isn't on the Favored list
+    if (!isFavored) {
+      const originLimiterResult = await env.PER_ORIGIN_RATE_LIMITER.limit({ key: origin ?? "" });
+      if (!originLimiterResult.success) {
+        return new Response(`Rate limit exceeded for Origin ${origin}`, { status: 429 });
       }
     }
 
     const cached = await cache.match(request.url);
     if (cached) {
       const respHeaders = new Headers(cached.headers);
-      if (allowedOrigin) {
-        respHeaders.set("Access-Control-Allow-Origin", allowedOrigin);
+      if (origin) {
+        // We know that this Origin is allowed; disallowed Origins were rejected with HTTP 403 above.
+        respHeaders.set("Access-Control-Allow-Origin", origin);
       }
       respHeaders.set("Vary", "Origin");
 
@@ -184,8 +190,8 @@ export default {
       ctx.waitUntil(cache.put(request.url, cacheable));
 
       const respHeaders = new Headers(cacheableHeaders);
-      if (allowedOrigin) {
-        respHeaders.set("Access-Control-Allow-Origin", allowedOrigin);
+      if (origin) {
+        respHeaders.set("Access-Control-Allow-Origin", origin);
       }
       respHeaders.set("Vary", "Origin");
       return new Response(body, { headers: respHeaders, status: status });
