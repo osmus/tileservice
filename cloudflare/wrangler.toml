@@ -1,0 +1,38 @@
+name = "tileservice"
+main = "src/index.ts"
+compatibility_date = "2024-09-02"
+minify = false
+
+r2_buckets  = [
+  { binding = "BUCKET", bucket_name = "osmus-tile", preview_bucket_name = "osmus-tile" }
+]
+
+[vars]
+# Newline-separated list of Origins to allow; "*" is treated as a wildcard
+# (matches zero or more chars)
+ALLOWED_ORIGINS = "*"
+
+# Newline-separated list of Origins which are not rate limited ("*" is treated a
+# wildcard, like above).
+#
+# This is commented out because we have chosen to manage the list in the
+# Cloudflare Dashboard rather than storing it in the public repository. Deploys
+# should be done using `wrangler deploy --keep-vars` to avoid overwriting the
+# stored value.
+# FAVORED_ORIGINS = ""
+
+# Value of the Cache-Control header to return
+CACHE_CONTROL = "public, max-age=3600"
+
+# Rate limiter configuration
+[[unsafe.bindings]]
+name = "PER_USER_RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 1000, period = 60 }
+
+[[unsafe.bindings]]
+name = "PER_ORIGIN_RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 30_000, period = 60 }
