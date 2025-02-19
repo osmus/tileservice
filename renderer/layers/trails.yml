@@ -400,6 +400,8 @@ layers:
             tag_value: highway
           - key: hiking
             tag_value: hiking
+          - key: historic
+            tag_value: historic
           - key: horse
             tag_value: horse
           - key: informal
@@ -517,6 +519,7 @@ layers:
           - canoe: put_in
           - leisure: slipway
           - waterway: access_point
+          - historic: wreck
           - __all__:
             - man_made: monitoring_station
             # filter to stations that we can link externally
