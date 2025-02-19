@@ -514,9 +514,21 @@ layers:
         geometry: point
         min_zoom: 7
         include_when:
-          canoe: put_in
-          leisure: slipway
-          waterway: access_point
+          - canoe: put_in
+          - leisure: slipway
+          - waterway: access_point
+          - __all__:
+            - man_made: monitoring_station
+            # filter to stations that we can link externally
+            - __any__:
+              - website: __any__
+              - __all__:
+                - ref: __any__
+                - operator: __any__
+            # filter to surface water monitoring stations
+            - __any__:
+              monitoring:water_level: yes
+              monitoring:flow_rate: yes
         attributes: *poi_attributes
       - source: osm
         geometry: point
@@ -556,23 +568,6 @@ layers:
           - __all__:
             - route: ferry
             - __any__: *trails_filter
-        attributes: *poi_attributes
-      - source: osm
-        geometry: point
-        min_zoom: 7
-        include_when:
-          - __all__:
-            - man_made: monitoring_station
-            # filter to stations that we can link externally
-            - __any__:
-              - website: __any__
-              - __all__:
-                - ref: __any__
-                - operator: __any__
-            # filter to surface water monitoring stations
-            - __any__:
-              monitoring:water_level: yes
-              monitoring:flow_rate: yes
         attributes: *poi_attributes
       # gather protected areas as points
       - source: osm
