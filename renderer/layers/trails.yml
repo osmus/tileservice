@@ -95,7 +95,10 @@ layers:
                 - highway: cycleway
             - __not__:
               # exclude anything indoors
-              - indoor: __any__
+              - __all__:
+                - indoor: __any__
+                - __not__:
+                  - indoor: no
               - level: __any__
               # exclude common combinations that probably aren't trails
               - man_made: pier
