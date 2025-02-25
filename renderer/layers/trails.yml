@@ -27,8 +27,14 @@ layers:
               - mtb:
                 - yes
                 - designated
-              - portage: __any__
-          # gather waterways with canoe tags
+              - portage:
+                - yes
+                - designated
+                - permissive
+                - permit
+                - private
+                - customers
+          # gather waterways with canoe or portage tags
           - __all__:
             - waterway:
               - river
@@ -41,7 +47,21 @@ layers:
               - fairway
               - link
               - flowline
-            - canoe: __any__
+            - __any__:
+              - canoe:
+                - yes
+                - designated
+                - permissive
+                - permit
+                - private
+                - customers
+              - portage:
+                - yes
+                - designated
+                - permissive
+                - permit
+                - private
+                - customers
           # gather ways we think might be trails based on common tagging patterns
           - __all__:
             - __any__:
