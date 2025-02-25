@@ -516,7 +516,6 @@ layers:
         geometry: point
         min_zoom: 7
         include_when:
-          - canoe: put_in
           - leisure: slipway
           - waterway: access_point
           - historic: wreck
