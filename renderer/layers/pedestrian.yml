@@ -1,0 +1,203 @@
+---
+schema_name: OSM US Pedestrian Infrastructure
+schema_description: Sidewalks, crossings, etc., supporting the Pedestrian Working Group
+attribution: <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
+sources:
+  osm:
+    type: osm
+    local_path: data/sources/planet.osm.pbf
+layers:
+  - id: pedestrian_highway
+    features:
+      - source: osm
+        geometry: line
+        min_zoom: 14
+        min_size: 1
+        include_when: &highway_filter
+          - highway:
+            - corridor
+            - footway
+            - pedestrian
+            - steps
+        attributes: &highway_attributes
+          - key: OSM_ID
+            value: ${feature.id}
+          - key: OSM_TYPE
+            value: ${feature.osm_type}
+          - key: OSM_VERSION
+            value: ${feature.osm_version}
+          - key: OSM_TIMESTAMP
+            value: ${feature.osm_timestamp}
+          - key: OSM_CHANGESET
+            value: ${feature.osm_changeset}
+          - key: OSM_USER_NAME
+            value: ${feature.osm_user_name}
+          - key: MIN_LAT
+            value: ${feature.min_lat}
+          - key: MIN_LON
+            value: ${feature.min_lon}
+          - key: MAX_LAT
+            value: ${feature.max_lat}
+          - key: MAX_LON
+            value: ${feature.max_lon}
+          - key: access
+            tag_value: access
+          - key: bridge
+            tag_value: bridge
+          - key: check_date
+            tag_value: check_date
+          - key: covered
+            tag_value: covered
+          - key: crossing
+            tag_value: crossing
+          - key: crossing:island
+            tag_value: crossing:island
+          - key: crossing:markings
+            tag_value: crossing:markings
+          - key: crossing:signals
+            tag_value: crossing:signals
+          - key: fixme
+            tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: foot
+            tag_value: foot
+          - key: footway
+            tag_value: footway
+          - key: ford
+            tag_value: ford
+          - key: highway
+            tag_value: highway
+          - key: incline
+            tag_value: incline
+          - key: indoor
+            tag_value: indoor
+          - key: informal
+            tag_value: informal
+          - key: intermittent
+            tag_value: intermittent
+          - key: level
+            tag_value: level
+          - key: lit
+            tag_value: lit
+          - key: name
+            tag_value: name
+          - key: oneway
+            tag_value: oneway
+          - key: oneway:foot
+            tag_value: oneway:foot
+          - key: oneway:wheelchair
+            tag_value: oneway:wheelchair
+          - key: oneway:conditional
+            tag_value: oneway:conditional
+          - key: oneway:foot:conditional
+            tag_value: oneway:foot:conditional
+          - key: oneway:wheelchair:conditional
+            tag_value: oneway:wheelchair:conditional
+          - key: operator
+            tag_value: operator
+          - key: ramp:wheelchair
+            tag_value: ramp:wheelchair
+          - key: ref
+            tag_value: ref
+          - key: smoothness
+            tag_value: smoothness
+          - key: surface
+            tag_value: surface
+          - key: survey:date
+            tag_value: survey:date
+          - key: symbol
+            tag_value: symbol
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
+          - key: tunnel
+            tag_value: tunnel
+          - key: wheelchair
+            tag_value: wheelchair
+          - key: width
+            tag_value: width
+  - id: pedestrian_highway_centerpoint
+    features:
+      # gather line issues as points so we can render markers for them at any zoom level
+      - source: osm
+        geometry: line_midpoint
+        min_zoom: 7
+        include_when:
+          - __all__:
+            - __any__: *highway_filter
+            - __any__:
+              - fixme: __any__
+              - FIXME: __any__
+              - todo: __any__
+              - TODO: __any__
+        attributes: *highway_attributes
+  - id: pedestrian_poi
+    features:
+      - source: osm
+        geometry: point
+        min_zoom: 14
+        include_when:
+          - barrier:
+            - kerb
+          - highway:
+            - crossing
+            - elevator
+        attributes:
+          - key: OSM_ID
+            value: ${feature.id}
+          - key: OSM_TYPE
+            value: ${feature.osm_type}
+          - key: OSM_VERSION
+            value: ${feature.osm_version}
+          - key: OSM_TIMESTAMP
+            value: ${feature.osm_timestamp}
+          - key: OSM_CHANGESET
+            value: ${feature.osm_changeset}
+          - key: OSM_USER_NAME
+            value: ${feature.osm_user_name}
+          - key: access
+            tag_value: access
+          - key: barrier
+            tag_value: barrier
+          - key: crossing
+            tag_value: crossing
+          - key: crossing:island
+            tag_value: crossing:island
+          - key: crossing:markings
+            tag_value: crossing:markings
+          - key: crossing:signals
+            tag_value: crossing:signals
+          - key: fixme
+            tag_value: fixme
+          - key: FIXME
+            tag_value: FIXME
+          - key: foot
+            tag_value: foot
+          - key: height
+            tag_value: height
+          - key: highway
+            tag_value: highway
+          - key: kerb
+            tag_value: kerb
+          - key: indoor
+            tag_value: indoor
+          - key: level
+            tag_value: level
+          - key: name
+            tag_value: name
+          - key: ref
+            tag_value: ref
+          - key: tactile_paving
+            tag_value: tactile_paving
+          - key: todo
+            tag_value: todo
+          - key: TODO
+            tag_value: TODO
+          - key: wheelchair
+            tag_value: wheelchair
+args:
+  area:
+    description: Geofabrik area to download
+    default: rhode-island
