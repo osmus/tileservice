@@ -1,0 +1,17 @@
+test/dest
+*.gem
+pkg/
+*.swp
+*~
+_site/
+.bundle/
+.DS_Store
+bbin/
+gh-pages/
+site/_site/
+coverage
+.jekyll-cache
+.jekyll-metadata
+vendor/
+Gemfile.lock
+_source/img-thumbnails

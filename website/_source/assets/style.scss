@@ -1,0 +1,47 @@
+---
+---
+@charset "UTF-8";
+
+@use "base";
+@use "layout";
+
+$baseurl: "{{site.url}}{{site.baseurl}}";
+$fonturl: $baseurl + "/assets/fonts/";
+
+@font-face{
+  src: url($fonturl + 'OhioKraft.otf');
+  font-family: "Ohio Kraft";
+}
+@font-face{
+  src: url($fonturl + 'Mistral.ttf');
+  font-family: "Mistral";
+}
+@font-face{
+  src: url($fonturl + 'routed-gothic.ttf');
+  font-family: "Routed Gothic";
+}
+@font-face{
+  src: url($fonturl + 'routed-gothic-italic.ttf');
+  font-family: "Routed Gothic";
+  font-style: italic;
+}
+@font-face{
+  src: url($fonturl + 'cmunorm.ttf');
+  font-family: "CMU Concrete";
+}
+@font-face{
+  src: url($fonturl + 'cmunobx.ttf');
+  font-family: "CMU Concrete";
+  font-weight: bold;
+}
+@font-face{
+  src: url($fonturl + 'cmunoti.ttf');
+  font-family: "CMU Concrete";
+  font-style: italic;
+}
+@font-face{
+  src: url($fonturl + 'cmunobi.ttf');
+  font-family: "CMU Concrete";
+  font-weight: bold;
+  font-style: italic;
+}

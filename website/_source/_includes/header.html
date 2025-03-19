@@ -1,0 +1,40 @@
+<div id="header" style="position: relative; overflow: hidden;">
+  <div class="container">
+    <div class="spaced-area">
+      <div class="left-space"></div>
+      <div class="prose" style="width:700px;">
+        <ul id="main-menu">
+          <li><a href="{{site.url}}{{site.baseurl}}/" {% if page.url == '/' %}class="active"{% endif %} style="font-style: italic;">Tileservice</a></li>
+          <li><a href="{{site.url}}{{site.baseurl}}/tiles/" {% if page.url == '/tiles/' %}class="active"{% endif %}>Tiles</a></li>
+          <li><a href="{{site.url}}{{site.baseurl}}/docs/" {% if page.url == '/docs/' %}class="active"{% endif %}>Docs</a></li>
+        </ul>
+        <div style="width:100%;">
+          <hr/>
+        </div>
+      </div>
+    </div>
+    <div class="prose">
+      <div class="site-branding-area-wrap">
+        <div class="site-branding-area">
+          <a href="{{site.url}}{{site.baseurl}}">
+            <img src="{{site.url}}{{site.baseurl}}/assets/img/tileservice-logo.svg" class="site-logo"/>
+          </a>
+          <h1 class="site-title-area">
+            <a href="{{site.url}}{{site.baseurl}}">
+              <div class="part-one">OpenStreetMap US{% unless page.url == '/' %} Tileservice{% endunless %}</div>
+              <div class="part-two">{% if page.url == '/' %}Tileservice{% else %}{{page.title}}{% endif %}</div>
+            </a>
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="spaced-area">
+      <div class="left-space"></div>
+      <div class="prose" style="width:700px;">
+        <div style="width:100%;">
+          <hr/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
