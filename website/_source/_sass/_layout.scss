@@ -6,7 +6,7 @@
 body {
   background-color: v.$background-color;
   color: v.$text-color;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.4em;
   font-family: v.$body-font;
 }
@@ -32,16 +32,48 @@ hr {
 }
 
 .container {
-  margin: 0 auto;
-  padding: 0  v.$sp 0  calc(v.$sp * 2);
+  margin: v.$sp auto;
+  padding: 0 v.$sp;
   max-width: 1000px + v.$sp * 2;
   display: flex;
   flex-direction: column;
 }
 
+/* prose */
+
+.prose > * {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  &:not(:last-child) {
+    margin-bottom: v.$sp;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: v.$ui-font;
+  line-height: 1;
+}
+
+h1 {
+  font-size: 1.7em;
+}
+h2 {
+  font-size: 1.15em;
+}
+h3 {
+  font-size: 1.1em;
+}
+
+/* accoutrements */
+
 .spaced-area {
   display: flex;
   justify-content: center;
+
+  .prose {
+    width:700px;
+  }
 
   .left-space {
     max-width: 160px;
@@ -50,16 +82,30 @@ hr {
     flex-shrink: 10;
   }
 }
+.spaced-hr {
+  height: 4px;
+  .prose > * {
+    margin: 0;
+    width: 100%;
+  }
+  hr {
+    width: 10000px;
+    position: absolute;
+    border-bottom-width: 4px;
+    margin: 0;
+  }
+}
 
 /* header */
 
 #header {
+  position: relative;
+  overflow: hidden;
   font-family: v.$ui-font;
   font-size: 1.2em;
 
   #main-menu {
     display: flex;
-    margin: v.$sp * 0.5 0;
     li {
       margin-right: v.$sp * 0.5;
     }
@@ -78,15 +124,7 @@ hr {
     text-decoration: underline;
   }
 
-  hr {
-    width: 10000px;
-    position: absolute;
-    border-bottom-width: 4px;
-    margin: 0;
-  }
-
   .site-branding-area-wrap {
-    padding-top: v.$sp * 1.75;
     max-width: 860px;
   }
 
@@ -114,52 +152,25 @@ hr {
   }
 }
 
-/* prose */
+/* main */
 
-.prose > * {
-  margin-bottom: v.$sp;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: v.$ui-font;
-  line-height: 1;
-}
-
-h1 {
-  font-size: 1.7em;
-}
-h2 {
-  font-size: 1.2em;
-  margin-top: 1.25em;
-}
-h3 {
-  font-size: 1.1em;
+#layout-body {
+  padding: v.$sp * 0.5 0;
 }
 
 /* footer */
-.copyright {
-  margin-top: 50px;
-  text-align: center;
-  font-family: v.$ui-font;
-  margin-bottom: v.$sp * 1.5;
+
+#footer {
+  position: relative;
+  overflow: hidden;
 }
-
-/* misc */
-
-ul.articles-list ul {
-  margin-left: v.$sp;
-  list-style-type: "▻ ";
+.copyright {
+  font-family: v.$ui-font;
 }
 
 /* narrow window */
 
 @media only screen and (max-width: 540px){
-  .container {
-    padding-left: v.$sp;
-  }
   #header {
     .site-branding-area {
       .site-logo {

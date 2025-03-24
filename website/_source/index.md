@@ -7,7 +7,7 @@ Welcome to the OpenStreetMap US Tileservice: a free vector map tile server. You 
 
 ## Quick start
 
-To embed the above map on a webpage, simply copy and paste the following HTML block. You can change the latitude, longitude, and zoom in the URL to show your area of interest. For the full developer guide, [visit the docs →](/docs)
+To embed the above map on a webpage, simply copy and paste the following HTML block. You can change the latitude, longitude, and zoom in the URL to show your area of interest. For the full developer guide, [visit the docs ➛](/docs)
 
 ## Limitations
 

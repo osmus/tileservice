@@ -26,22 +26,16 @@ $fonturl: $baseurl + "/assets/fonts/";
   font-style: italic;
 }
 @font-face{
-  src: url($fonturl + 'cmunorm.ttf');
-  font-family: "CMU Concrete";
+  src: url($fonturl + 'EBGaramond08-Regular.otf');
+  font-family: "EB Garamond";
 }
 @font-face{
-  src: url($fonturl + 'cmunobx.ttf');
-  font-family: "CMU Concrete";
+  src: url($fonturl + 'EBGaramondSC08-Regular.otf');
+  font-family: "EB Garamond";
   font-weight: bold;
 }
 @font-face{
-  src: url($fonturl + 'cmunoti.ttf');
-  font-family: "CMU Concrete";
-  font-style: italic;
-}
-@font-face{
-  src: url($fonturl + 'cmunobi.ttf');
-  font-family: "CMU Concrete";
-  font-weight: bold;
+  src: url($fonturl + 'EBGaramond08-Italic.otf');
+  font-family: "EB Garamond";
   font-style: italic;
 }
