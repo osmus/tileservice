@@ -655,17 +655,12 @@ layers:
         geometry: polygon
         min_zoom: 7
         min_size: 1
-        include_when:
-          - __all__:
-            - __any__: &barrier_filter
-              - man_made: breakwater
-              - natural: beaver_dam
-              - waterway:
-                - dam
-                - weir
-            - __any__: &area_filter
-              - area: yes
-              - type: multipolygon
+        include_when: &barrier_filter
+          - man_made: breakwater
+          - natural: beaver_dam
+          - waterway:
+            - dam
+            - weir
         attributes: &barrier_attributes
           - key: OSM_ID
             value: ${feature.id}
@@ -698,10 +693,7 @@ layers:
         geometry: line
         min_zoom: 7
         min_size: 1
-        include_when:
-          - __all__:
-            - __any__: *barrier_filter
-            - __not__: *area_filter
+        include_when: *barrier_filter
         attributes: *barrier_attributes
 args:
   area:
