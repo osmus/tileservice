@@ -8,7 +8,7 @@
     "build": "wrangler deploy --outdir dist --dry-run"
   },
   "dependencies": {
-    "pmtiles": "^4.2.1"
+    "pmtiles": "^4.3.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
