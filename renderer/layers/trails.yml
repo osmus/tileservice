@@ -656,6 +656,7 @@ layers:
         min_zoom: 7
         min_size: 1
         include_when: &barrier_filter
+          - barrier: floating_boom
           - man_made: breakwater
           - natural: beaver_dam
           - waterway:
@@ -674,6 +675,8 @@ layers:
             value: ${feature.osm_changeset}
           - key: OSM_USER_NAME
             value: ${feature.osm_user_name}
+          - key: barrier
+            tag_value: barrier
           - key: canoe
             tag_value: canoe
           - key: intermittent
