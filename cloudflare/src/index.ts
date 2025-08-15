@@ -1,3 +1,5 @@
+import { Hono, Context } from "hono";
+import { HTTPException } from "hono/http-exception";
 import {
   Compression,
   EtagMismatch,
@@ -21,45 +23,20 @@ interface Env {
 
 class KeyNotFoundError extends Error {}
 
-const regexEscape = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const regexEscape = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const globToRegex = (glob: string): RegExp => {
   return new RegExp("^" + glob.split("*").map(regexEscape).join(".*") + "$");
-}
+};
+
+const parseOriginListToRegexes = (origins?: string): RegExp[] => {
+  return origins?.split("\n").filter((s) => s.length > 0).map(globToRegex) ?? [];
+};
 
 const pmtiles_path = (name: string, setting?: string): string => {
   if (setting) {
     return setting.replaceAll("{name}", name);
   }
   return name + ".pmtiles";
-};
-
-const TILE_PATTERN = /^\/(?<NAME>[0-9a-zA-Z\/!\-_\.\*\'\(\)]+)\/(?<Z>\d+)\/(?<X>\d+)\/(?<Y>\d+).(?<EXT>[a-z]+)$/;
-const TILESET_PATTERN = /^\/(?<NAME>[0-9a-zA-Z\/!\-_\.\*\'\(\)]+).json$/;
-const FONT_PATTERN = /^\/fonts\/(?<FONT_NAME>[^\/]+)\/(?<RANGE>\d+-\d+).pbf$/;
-
-const tile_path = (
-  path: string,
-): {
-  ok: boolean;
-  name: string;
-  tile?: [number, number, number];
-  ext: string;
-} => {
-  const tile_match = path.match(TILE_PATTERN);
-
-  if (tile_match) {
-    const g = tile_match.groups!;
-    return { ok: true, name: g.NAME, tile: [+g.Z, +g.X, +g.Y], ext: g.EXT };
-  }
-
-  const tileset_match = path.match(TILESET_PATTERN);
-
-  if (tileset_match) {
-    const g = tileset_match.groups!;
-    return { ok: true, name: g.NAME, ext: "json" };
-  }
-
-  return { ok: false, name: "", tile: [0, 0, 0], ext: "" };
 };
 
 async function nativeDecompress(buf: ArrayBuffer, compression: Compression): Promise<ArrayBuffer> {
@@ -119,36 +96,35 @@ class R2Source implements Source {
   }
 }
 
-interface RouteHandler {
-  pattern: RegExp;
-  handler: (request: Request, env: Env, ctx: ExecutionContext) => Promise<Response>;
-}
+async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+  const env = c.env;
 
-async function handleTileRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  const url = new URL(request.url);
-  const match = url.pathname.match(TILE_PATTERN);
+  const name = c.req.param("name");
+  const z = parseInt(c.req.param("z"));
+  const x = parseInt(c.req.param("x"));
+  const y_ext = c.req.param("y_ext");
+
+  // Parse y coord and file extension from the combined parameter
+  const match = y_ext.match(/^(\d+)\.([a-z]+)$/);
   if (!match) {
-    return new Response("Invalid tile URL", { status: 404 });
+    throw new HTTPException(400, { message: "Invalid tile format" });
+  }
+  const y = parseInt(match[1]);
+  const ext = match[2];
+
+  if (isNaN(z) || isNaN(x) || isNaN(y)) {
+    throw new HTTPException(400, { message: "Invalid tile coordinates" });
   }
 
-  const { NAME, Z, X, Y, EXT } = match.groups!;
-  const tile = [+Z, +X, +Y];
+  const tile = [z, x, y];
+  const source = new R2Source(env, name);
+  const pmtiles = new PMTiles(source, CACHE, nativeDecompress);
 
-  const cache = caches.default;
-  const cached = await cache.match(request.url);
-  if (cached) {
-    return handleCachedResponse(cached, request.headers.get("Origin"));
-  }
-
-  const cacheableHeaders = new Headers();
-  const source = new R2Source(env, NAME);
-  const p = new PMTiles(source, CACHE, nativeDecompress);
-  
   try {
-    const pHeader = await p.getHeader();
-    
+    const pHeader = await pmtiles.getHeader();
+
     if (tile[0] < pHeader.minZoom || tile[0] > pHeader.maxZoom) {
-      return cacheableResponse(undefined, cacheableHeaders, 404, request, ctx, env);
+      throw new HTTPException(404, { message: "Tile zoom level outside archive bounds" });
     }
 
     for (const pair of [
@@ -158,224 +134,176 @@ async function handleTileRequest(request: Request, env: Env, ctx: ExecutionConte
       [TileType.Webp, "webp"],
       [TileType.Avif, "avif"],
     ]) {
-      if (pHeader.tileType === pair[0] && EXT !== pair[1]) {
-        if (pHeader.tileType === TileType.Mvt && EXT === "pbf") {
+      if (pHeader.tileType === pair[0] && ext !== pair[1]) {
+        if (pHeader.tileType === TileType.Mvt && ext === "pbf") {
           continue;
         }
-        return cacheableResponse(
-          `Bad request: requested .${EXT} but archive has type .${pair[1]}`,
-          cacheableHeaders,
-          400,
-          request,
-          ctx,
-          env
-        );
+        throw new HTTPException(400, {
+          message: `Bad request: requested .${ext} but archive has type .${pair[1]}`,
+        });
       }
     }
 
-    const tiledata = await p.getZxy(tile[0], tile[1], tile[2]);
+    const tiledata = await pmtiles.getZxy(tile[0], tile[1], tile[2]);
+
+    c.header("Cache-Control", "public, max-age=86400");
 
     switch (pHeader.tileType) {
       case TileType.Mvt:
-        cacheableHeaders.set("Content-Type", "application/x-protobuf");
+        c.header("Content-Type", "application/x-protobuf");
         break;
       case TileType.Png:
-        cacheableHeaders.set("Content-Type", "image/png");
+        c.header("Content-Type", "image/png");
         break;
       case TileType.Jpeg:
-        cacheableHeaders.set("Content-Type", "image/jpeg");
+        c.header("Content-Type", "image/jpeg");
         break;
       case TileType.Webp:
-        cacheableHeaders.set("Content-Type", "image/webp");
+        c.header("Content-Type", "image/webp");
         break;
     }
 
     if (tiledata) {
-      return cacheableResponse(tiledata.data, cacheableHeaders, 200, request, ctx, env);
+      return c.body(tiledata.data);
     }
-    return cacheableResponse(undefined, cacheableHeaders, 204, request, ctx, env);
+    return c.body(null, 204);
   } catch (e) {
     if (e instanceof KeyNotFoundError) {
-      return cacheableResponse("Archive not found", cacheableHeaders, 404, request, ctx, env);
+      throw new HTTPException(404, { message: "Archive not found" });
     }
     throw e;
   }
 }
 
-async function handleTilesetRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  const url = new URL(request.url);
-  const match = url.pathname.match(TILESET_PATTERN);
-  if (!match) {
-    return new Response("Invalid tileset URL", { status: 404 });
-  }
+async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+  const url = new URL(c.req.url);
+  const name = c.req.param("name").split(".")[0];
+  const source = new R2Source(c.env, name);
+  const pmtiles = new PMTiles(source, CACHE, nativeDecompress);
 
-  const { NAME } = match.groups!;
-  const cache = caches.default;
-  const cached = await cache.match(request.url);
-  if (cached) {
-    return handleCachedResponse(cached, request.headers.get("Origin"));
-  }
-
-  const cacheableHeaders = new Headers();
-  cacheableHeaders.set("Content-Type", "application/json");
-  
-  const source = new R2Source(env, NAME);
-  const p = new PMTiles(source, CACHE, nativeDecompress);
-  
   try {
-    const t = await p.getTileJson(`https://${env.PUBLIC_HOSTNAME || url.hostname}/${NAME}`);
-    return cacheableResponse(JSON.stringify(t), cacheableHeaders, 200, request, ctx, env);
+    const tilejson = await pmtiles.getTileJson(`https://${url.hostname}/${name}`);
+    c.header("Cache-Control", "public, max-age=86400");
+    return c.json(tilejson as any);
   } catch (e) {
     if (e instanceof KeyNotFoundError) {
-      return cacheableResponse("Archive not found", cacheableHeaders, 404, request, ctx, env);
+      throw new HTTPException(404, { message: "Archive not found" });
     }
     throw e;
   }
 }
 
-async function handleFontRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  const url = new URL(request.url);
-  const match = decodeURIComponent(url.pathname).match(FONT_PATTERN);
-  if (!match) {
-    return new Response("Invalid font URL", { status: 404 });
+async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+  const fontPath = c.req.path.substring(1); // Remove leading slash
+
+  const fontFile = await c.env.BUCKET.get(fontPath);
+  if (!fontFile) {
+    throw new HTTPException(404, { message: "Font file not found" });
   }
 
-  const { FONT_NAME, RANGE } = match.groups!;
-  const fontPath = `fonts/${FONT_NAME}/${RANGE}.pbf`;
+  const arrayBuffer = await fontFile.arrayBuffer();
 
-  const cache = caches.default;
-  const cached = await cache.match(request.url);
-  if (cached) {
-    return handleCachedResponse(cached, request.headers.get("Origin"));
-  }
+  c.header("Cache-Control", "public, max-age=604800"); // 7 days (fonts don't change often)
+  c.header("Content-Type", "application/octet-stream");
 
-  const cacheableHeaders = new Headers();
-  cacheableHeaders.set("Content-Type", "application/octet-stream");
-
-  console.log(fontPath);
-
-  try {
-    const fontFile = await env.BUCKET.get(fontPath);
-    if (!fontFile) {
-      return cacheableResponse("Font file not found", cacheableHeaders, 404, request, ctx, env);
-    }
-
-    const arrayBuffer = await fontFile.arrayBuffer();
-    return cacheableResponse(arrayBuffer, cacheableHeaders, 200, request, ctx, env);
-  } catch (e) {
-    return cacheableResponse("Error fetching font file", cacheableHeaders, 500, request, ctx, env);
-  }
+  return c.body(arrayBuffer);
 }
 
-function handleCachedResponse(cached: Response, origin: string | null): Response {
-  const respHeaders = new Headers(cached.headers);
-  if (origin) {
-    respHeaders.set("Access-Control-Allow-Origin", origin);
-  }
-  respHeaders.set("Vary", "Origin");
-
-  return new Response(cached.body, {
-    headers: respHeaders,
-    status: cached.status,
-  });
-}
-
-function cacheableResponse(
-  body: ArrayBuffer | string | undefined,
-  cacheableHeaders: Headers,
-  status: number,
-  request: Request,
-  ctx: ExecutionContext,
-  env: Env,
-): Response {
-  cacheableHeaders.set("Cache-Control", env.CACHE_CONTROL || "public, max-age=86400");
-
-  const cacheable = new Response(body, {
-    headers: cacheableHeaders,
-    status: status,
-  });
-
-  ctx.waitUntil(caches.default.put(request.url, cacheable));
-
-  const respHeaders = new Headers(cacheableHeaders);
-  const origin = request.headers.get("Origin");
-  if (origin) {
-    respHeaders.set("Access-Control-Allow-Origin", origin);
-  }
-  respHeaders.set("Vary", "Origin");
-  return new Response(body, { headers: respHeaders, status: status });
-}
-
-const routes: RouteHandler[] = [
-  {
-    pattern: TILE_PATTERN,
-    handler: handleTileRequest,
-  },
-  {
-    pattern: TILESET_PATTERN,
-    handler: handleTilesetRequest,
-  },
-  {
-    pattern: FONT_PATTERN,
-    handler: handleFontRequest,
-  },
-];
-
-async function router(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-  if (request.method.toUpperCase() === "POST") {
-    return new Response(undefined, { status: 405 });
-  }
-
-  const url = new URL(request.url);
-  
-  // Check if this request's Origin is in the allowed origins list. If no
-  // Origin header was provided, the request will be allowed only if the
-  // allowed list contains an entry "*" (which permits any Origin).
-  const origin = request.headers.get("Origin");
-  const allowedOrigins = env.ALLOWED_ORIGINS?.split("\n").filter(s => s.length > 0).map(globToRegex) ?? [];
-  const isAllowed = allowedOrigins.some(regex => regex.test(origin ?? ""));
+// Check if this request's Origin is in the allowed origins list. If no
+// Origin header was provided, the request will be allowed only if the
+// allowed list contains an entry "*" (which permits any Origin).
+async function originMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+  const origin = c.req.header("Origin");
+  const allowedOrigins = parseOriginListToRegexes(c.env.ALLOWED_ORIGINS);
+  const isAllowed = allowedOrigins.some((regex) => regex.test(origin ?? ""));
 
   if (!isAllowed) {
-    return new Response("Origin not allowed", { status: 403 });
+    throw new HTTPException(403, { message: "Origin not allowed" });
   }
 
-  // Enforce per-user and per-origin rate limits
+  await next();
+}
 
+// Enforce per-user and per-origin rate limits
+async function rateLimitMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
   // NOTE: IP address isn't necessarily unique per user (especially on mobile
   // networks) but it's the best we can do. Per-user limits should be set
   // generously to avoid frustrating users who share their IP with lots of
   // other users.
-  const ipAddress = request.headers.get("cf-connecting-ip");
-  const userLimiterResult = await env.PER_USER_RATE_LIMITER.limit({ key: ipAddress ?? "" });
+  const ipAddress = c.req.header("CF-Connecting-IP");
+  const userLimiterResult = await c.env.PER_USER_RATE_LIMITER.limit({ key: ipAddress ?? "" });
   if (!userLimiterResult.success) {
-    return new Response(`Rate limit exceeded for IP ${ipAddress}`, { status: 429 });
+    throw new HTTPException(429, { message: `Rate limit exceeded for IP ${ipAddress}` });
   }
 
   // Check if this request's Origin is favored (not subject to per-Origin
   // rate limiting). Only requests that send an Origin header can be favored;
   // requests that omit the Origin header are rate-limited together in one
   // bucket.
-  const favoredOrigins = env.FAVORED_ORIGINS?.split("\n").filter(s => s.length > 0).map(globToRegex) ?? [];
-  const isFavored = origin && favoredOrigins.some(regex => regex.test(origin));
+  const origin = c.req.header("Origin");
+  const favoredOrigins = parseOriginListToRegexes(c.env.FAVORED_ORIGINS);
+  const isFavored = origin && favoredOrigins.some((regex) => regex.test(origin));
 
   // Only enforce per-origin rate limiting if the Origin isn't on the Favored list
   if (!isFavored) {
-    const originLimiterResult = await env.PER_ORIGIN_RATE_LIMITER.limit({ key: origin ?? "" });
+    const originLimiterResult = await c.env.PER_ORIGIN_RATE_LIMITER.limit({ key: origin ?? "" });
     if (!originLimiterResult.success) {
-      return new Response(`Rate limit exceeded for Origin ${origin}`, { status: 429 });
+      throw new HTTPException(429, { message: `Rate limit exceeded for Origin ${origin}` });
     }
   }
 
-  // Match URL against routes
-  for (const route of routes) {
-    if (route.pattern.test(decodeURIComponent(url.pathname))) {
-      return route.handler(request, env, ctx);
-    }
-  }
-
-  return new Response("Not found", { status: 404 });
+  await next();
 }
 
-export default {
-  fetch: router,
-};
+// Add CORS headers to responses. This runs after the Origin validation
+// middleware, so it can safely assume that all requests it sees are from
+// allowed origins. All it needs to do is tell the browser that this site
+// permits requests from that origin, and tell any HTTP proxies that the
+// response contents will vary by origin.
+async function corsMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+  await next();
+
+  const origin = c.req.header("Origin");
+  if (origin) {
+    c.res.headers.set("Access-Control-Allow-Origin", origin);
+  }
+  c.res.headers.set("Vary", "Origin");
+}
+
+const app = new Hono<{ Bindings: Env }>();
+
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    switch (err.status) {
+      case 400:
+        c.header("Cache-Control", "public, max-age=3600");
+        break;
+      case 403:
+        c.header("Cache-Control", "public, max-age=300");
+        break;
+      case 404:
+        c.header("Cache-Control", "public, max-age=300");
+        break;
+      case 429:
+        c.header("Cache-Control", "no-cache"); // Never cache rate limits
+        break;
+      default:
+        c.header("Cache-Control", "no-cache"); // Never cache other errors
+        break;
+    }
+    return err.getResponse();
+  }
+
+  c.header("Cache-Control", "no-cache"); // Never cache server errors
+  return c.text("Internal Server Error", 500);
+});
+
+app.use("*", originMiddleware);
+app.use("*", rateLimitMiddleware);
+app.use("*", corsMiddleware);
+
+app.get("/:name/:z/:x/:y_ext", handleTileRequest);
+app.get("/:name{(.*)\\.json}", handleTilesetRequest);
+app.get("/fonts/:fontName/:range_pbf", handleFontRequest);
+
+export default app;

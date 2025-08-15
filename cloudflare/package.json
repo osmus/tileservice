@@ -8,6 +8,7 @@
     "build": "wrangler deploy --outdir dist --dry-run"
   },
   "dependencies": {
+    "hono": "^4.9.2",
     "pmtiles": "^4.2.1"
   },
   "devDependencies": {
