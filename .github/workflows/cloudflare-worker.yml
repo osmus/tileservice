@@ -1,0 +1,34 @@
+---
+name: Cloudflare Worker Checks
+on:
+  push:
+    branches: [main]
+    paths: ['cloudflare/**']
+  pull_request:
+    paths: ['cloudflare/**']
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Typecheck, lint, and check formatting
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cloudflare
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: cloudflare/package-lock.json
+
+      - run: npm clean-install
+
+      - run: npm run typecheck
+
+      - run: npm run check

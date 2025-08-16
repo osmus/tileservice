@@ -1,12 +1,12 @@
-import { Hono, Context } from "hono";
+import { Hono, type Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 import {
   Compression,
   EtagMismatch,
   PMTiles,
-  RangeResponse,
+  type RangeResponse,
   ResolvedValueCache,
-  Source,
+  type Source,
   TileType,
 } from "pmtiles";
 
@@ -17,26 +17,31 @@ interface Env {
   FAVORED_ORIGINS?: string;
   PMTILES_PATH?: string;
   PUBLIC_HOSTNAME?: string;
-  PER_USER_RATE_LIMITER: any;
-  PER_ORIGIN_RATE_LIMITER: any;
+  PER_USER_RATE_LIMITER: RateLimit;
+  PER_ORIGIN_RATE_LIMITER: RateLimit;
 }
 
 class KeyNotFoundError extends Error {}
 
 const regexEscape = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const globToRegex = (glob: string): RegExp => {
-  return new RegExp("^" + glob.split("*").map(regexEscape).join(".*") + "$");
+  return new RegExp(`^${glob.split("*").map(regexEscape).join(".*")}$`);
 };
 
 const parseOriginListToRegexes = (origins?: string): RegExp[] => {
-  return origins?.split("\n").filter((s) => s.length > 0).map(globToRegex) ?? [];
+  return (
+    origins
+      ?.split("\n")
+      .filter((s) => s.length > 0)
+      .map(globToRegex) ?? []
+  );
 };
 
 const pmtiles_path = (name: string, setting?: string): string => {
   if (setting) {
     return setting.replaceAll("{name}", name);
   }
-  return name + ".pmtiles";
+  return `${name}.pmtiles`;
 };
 
 async function nativeDecompress(buf: ArrayBuffer, compression: Compression): Promise<ArrayBuffer> {
@@ -69,7 +74,7 @@ class R2Source implements Source {
   async getBytes(
     offset: number,
     length: number,
-    signal?: AbortSignal,
+    _signal?: AbortSignal,
     etag?: string,
   ): Promise<RangeResponse> {
     const resp = await this.env.BUCKET.get(pmtiles_path(this.archiveName, this.env.PMTILES_PATH), {
@@ -100,8 +105,8 @@ async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   const env = c.env;
 
   const name = c.req.param("name");
-  const z = parseInt(c.req.param("z"));
-  const x = parseInt(c.req.param("x"));
+  const z = Number.parseInt(c.req.param("z"), 10);
+  const x = Number.parseInt(c.req.param("x"), 10);
   const y_ext = c.req.param("y_ext");
 
   // Parse y coord and file extension from the combined parameter
@@ -109,10 +114,10 @@ async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   if (!match) {
     throw new HTTPException(400, { message: "Invalid tile format" });
   }
-  const y = parseInt(match[1]);
+  const y = Number.parseInt(match[1], 10);
   const ext = match[2];
 
-  if (isNaN(z) || isNaN(x) || isNaN(y)) {
+  if (Number.isNaN(z) || Number.isNaN(x) || Number.isNaN(y)) {
     throw new HTTPException(400, { message: "Invalid tile coordinates" });
   }
 
@@ -184,6 +189,7 @@ async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Resp
   try {
     const tilejson = await pmtiles.getTileJson(`https://${url.hostname}/${name}`);
     c.header("Cache-Control", "public, max-age=86400");
+    // biome-ignore lint/suspicious/noExplicitAny: tilejson is a JSONValue, but that type is recursive and tsc can't deal with it in this context
     return c.json(tilejson as any);
   } catch (e) {
     if (e instanceof KeyNotFoundError) {
@@ -266,7 +272,7 @@ async function cacheMiddleware(c: Context<{ Bindings: Env }>, next: () => Promis
   }
 
   await next();
-  
+
   const cacheControl = c.res.headers.get("Cache-Control");
   if (!cacheControl || cacheControl.includes("no-cache") || cacheControl.includes("no-store")) {
     return;
