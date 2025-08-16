@@ -21,9 +21,6 @@ ALLOWED_ORIGINS = "*"
 # stored value.
 # FAVORED_ORIGINS = ""
 
-# Value of the Cache-Control header to return
-CACHE_CONTROL = "public, max-age=3600"
-
 # Rate limiter configuration
 [[unsafe.bindings]]
 name = "PER_USER_RATE_LIMITER"
