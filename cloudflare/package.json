@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "hono": "^4.9.2",
-    "pmtiles": "^4.2.1"
+    "pmtiles": "^4.3.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
