@@ -255,6 +255,27 @@ async function rateLimitMiddleware(c: Context<{ Bindings: Env }>, next: () => Pr
   await next();
 }
 
+// Cache responses for requests and reuse them on subsequent requests for the
+// same resource. This middleware runs before CORS middleware, so the stored
+// response does NOT have the Access-Control-Allow-Origin header which varies
+// by request Origin.
+async function cacheMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise<void>) {
+  const cached = await caches.default.match(c.req.raw);
+  if (cached) {
+    return cached;
+  }
+
+  await next();
+  
+  const cacheControl = c.res.headers.get("Cache-Control");
+  if (!cacheControl || cacheControl.includes("no-cache") || cacheControl.includes("no-store")) {
+    return;
+  }
+
+  // Store in cache asynchronously
+  c.executionCtx.waitUntil(caches.default.put(c.req.raw, c.res.clone()));
+}
+
 // Add CORS headers to responses. This runs after the Origin validation
 // middleware, so it can safely assume that all requests it sees are from
 // allowed origins. All it needs to do is tell the browser that this site
@@ -300,6 +321,7 @@ app.onError((err, c) => {
 
 app.use("*", originMiddleware);
 app.use("*", rateLimitMiddleware);
+app.get("*", cacheMiddleware); // NOTE: only cache GET requests
 app.use("*", corsMiddleware);
 
 app.get("/:name/:z/:x/:y_ext", handleTileRequest);
