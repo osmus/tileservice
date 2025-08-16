@@ -2,23 +2,25 @@ name = "tileservice"
 main = "src/index.ts"
 compatibility_date = "2024-09-02"
 minify = false
+keep_vars = true
 
 r2_buckets  = [
   { binding = "BUCKET", bucket_name = "osmus-tile", preview_bucket_name = "osmus-tile" }
 ]
 
 [vars]
-# Newline-separated list of Origins to allow; "*" is treated as a wildcard
-# (matches zero or more chars)
+# Newline-separated list of Origins to allow; each line is a glob pattern where
+# "*" is treated as a wildcard (matches zero or more chars)
 ALLOWED_ORIGINS = "*"
 
-# Newline-separated list of Origins which are not rate limited ("*" is treated a
-# wildcard, like above).
+# Newline-separated list of Origins which are not rate limited (each line is a
+# glob pattern, like above).
 #
-# This is commented out because we have chosen to manage the list in the
-# Cloudflare Dashboard rather than storing it in the public repository. Deploys
-# should be done using `wrangler deploy --keep-vars` to avoid overwriting the
-# stored value.
+# This is commented out because we have chosen to manage the list of favored
+# origins in the Cloudflare Dashboard rather than storing it in the public
+# repository. Deploys should be done using `wrangler deploy --keep-vars` to
+# avoid overwriting the stored value. The `keep_vars = true` line above should
+# ensure that this is the default behavior to help avoid mistakes.
 # FAVORED_ORIGINS = ""
 
 # Rate limiter configuration
