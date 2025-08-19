@@ -37,13 +37,6 @@ const parseOriginListToRegexes = (origins?: string): RegExp[] => {
   );
 };
 
-const pmtiles_path = (name: string, setting?: string): string => {
-  if (setting) {
-    return setting.replaceAll("{name}", name);
-  }
-  return `${name}.pmtiles`;
-};
-
 async function nativeDecompress(buf: ArrayBuffer, compression: Compression): Promise<ArrayBuffer> {
   if (compression === Compression.None || compression === Compression.Unknown) {
     return buf;
@@ -60,15 +53,15 @@ const CACHE = new ResolvedValueCache(25, undefined, nativeDecompress);
 
 class R2Source implements Source {
   env: Env;
-  archiveName: string;
+  archivePath: string;
 
-  constructor(env: Env, archiveName: string) {
+  constructor(env: Env, archivePath: string) {
     this.env = env;
-    this.archiveName = archiveName;
+    this.archivePath = archivePath;
   }
 
   getKey() {
-    return this.archiveName;
+    return this.archivePath;
   }
 
   async getBytes(
@@ -77,10 +70,11 @@ class R2Source implements Source {
     _signal?: AbortSignal,
     etag?: string,
   ): Promise<RangeResponse> {
-    const resp = await this.env.BUCKET.get(pmtiles_path(this.archiveName, this.env.PMTILES_PATH), {
+    const resp = await this.env.BUCKET.get(this.archivePath, {
       range: { offset: offset, length: length },
       onlyIf: { etagMatches: etag },
     });
+
     if (!resp) {
       throw new KeyNotFoundError("Archive not found");
     }
@@ -102,8 +96,7 @@ class R2Source implements Source {
 }
 
 async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
-  const env = c.env;
-
+  const subdirectory = c.req.param("subdirectory"); // "vector" or "raster" or undefined
   const name = c.req.param("name");
   const z = Number.parseInt(c.req.param("z"), 10);
   const x = Number.parseInt(c.req.param("x"), 10);
@@ -122,7 +115,12 @@ async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   }
 
   const tile = [z, x, y];
-  const source = new R2Source(env, name);
+
+  // Construct the archive path based on URL structure
+  const filename = `${name}.pmtiles`;
+  const archivePath = subdirectory ? `${subdirectory}/${filename}` : filename;
+
+  const source = new R2Source(c.env, archivePath);
   const pmtiles = new PMTiles(source, CACHE, nativeDecompress);
 
   try {
@@ -182,12 +180,21 @@ async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Respons
 
 async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
   const url = new URL(c.req.url);
+  const subdirectory = c.req.param("subdirectory"); // "vector" or "raster" or undefined
   const name = c.req.param("name").split(".")[0];
-  const source = new R2Source(c.env, name);
+
+  // Construct the archive path based on URL structure
+  const filename = `${name}.pmtiles`;
+  const archivePath = subdirectory ? `${subdirectory}/${filename}` : filename;
+
+  const source = new R2Source(c.env, archivePath);
   const pmtiles = new PMTiles(source, CACHE, nativeDecompress);
 
   try {
-    const tilejson = await pmtiles.getTileJson(`https://${url.hostname}/${name}`);
+    const baseUrl = subdirectory
+      ? `https://${url.hostname}/${subdirectory}/${name}`
+      : `https://${url.hostname}/${name}`;
+    const tilejson = await pmtiles.getTileJson(baseUrl);
     c.header("Cache-Control", "public, max-age=86400");
     // biome-ignore lint/suspicious/noExplicitAny: tilejson is a JSONValue, but that type is recursive and tsc can't deal with it in this context
     return c.json(tilejson as any);
@@ -330,8 +337,14 @@ app.use("*", rateLimitMiddleware);
 app.get("*", cacheMiddleware); // NOTE: only cache GET requests
 app.use("*", corsMiddleware);
 
+// New routes with subdirectory support
+app.get("/:subdirectory{(vector|raster)}/:name/:z/:x/:y_ext", handleTileRequest);
+app.get("/:subdirectory{(vector|raster)}/:name{(.*)\\.json}", handleTilesetRequest);
+
+// Backward compatibility routes (existing structure)
 app.get("/:name/:z/:x/:y_ext", handleTileRequest);
 app.get("/:name{(.*)\\.json}", handleTilesetRequest);
+
 app.get("/fonts/:fontName/:range_pbf", handleFontRequest);
 
 export default app;
