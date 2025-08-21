@@ -1,6 +1,0 @@
-url: "https://osmus.github.io"
-baseurl: "/tileservice"
-liquid:
-  error_mode: warn
-  strict_variables: false
-  strict_filters: true
