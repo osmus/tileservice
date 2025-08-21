@@ -22,7 +22,7 @@ New to vector tiles or web mapping? These external resources provide comprehensi
 
 Anonymous usage is rate-limited but sufficient for development and small projects. For commercial use or higher limits, please fill out an [application form](https://openstreetmap.app.neoncrm.com/np/clients/openstreetmap/survey.jsp?surveyId=20).
 
-All usage must comply with our [usage policy](/usage-policy). Misuse of the Tileservice will result in your application being blocked.
+All usage must comply with our [usage policy](/usage-policy/). Misuse of the Tileservice will result in your application being blocked.
 
 ## About OpenStreetMap US
 
