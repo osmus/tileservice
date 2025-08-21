@@ -22,6 +22,9 @@ jobs:
         with:
           working-directory: website
           bundler-cache: true
+
+      - name: Add Linux/x86_64 platform to Gemfile.lock
+        run: bundle lock --add-platform x86_64-linux
           
       - name: Setup Node.js
         uses: actions/setup-node@v4
