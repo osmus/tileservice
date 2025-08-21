@@ -1,5 +1,6 @@
 import { Hono, type Context } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { accepts } from "hono/accepts";
 import {
   Compression,
   EtagMismatch,
@@ -222,6 +223,23 @@ async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   return c.body(arrayBuffer);
 }
 
+async function handleStaticFileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+  let path = c.req.path;
+  if (!path.startsWith("/")) path = `/${path}`;
+  if (path.endsWith("/")) path += "index.html";
+
+  const objectKey = new URL(`.${path}`, "file:///www/").pathname.slice(1); // Remove leading slash
+  const staticFile = await c.env.BUCKET.get(objectKey);
+  if (!staticFile) {
+    throw new HTTPException(404, { message: "File not found" });
+  }
+
+  c.header("Cache-Control", "public, max-age=3600"); // 1 hour for static files
+  c.header("Content-Type", staticFile.httpMetadata?.contentType);
+
+  return c.body(await staticFile.arrayBuffer());
+}
+
 // Check if this request's Origin is in the allowed origins list. If no
 // Origin header was provided, the request will be allowed only if the
 // allowed list contains an entry "*" (which permits any Origin).
@@ -306,8 +324,33 @@ async function corsMiddleware(c: Context<{ Bindings: Env }>, next: () => Promise
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.onError((err, c) => {
+app.onError(async (err, c) => {
   if (err instanceof HTTPException) {
+    // For 404 errors, serve the 404.html error page if the Accept: header
+    // states that the client will accept HTML; otherwise serve plaintext
+    if (err.status === 404) {
+      const accept = accepts(c, {
+        header: "Accept",
+        supports: ["text/html", "text/plain"],
+        default: "text/plain",
+      });
+      if (accept === "text/html") {
+        const notFoundFile = await c.env.BUCKET.get("www/404.html");
+        if (notFoundFile) {
+          return new Response(await notFoundFile.arrayBuffer(), {
+            status: 404,
+            headers: {
+              "Content-Type": "text/html; charset=utf-8",
+              "Cache-Control": "public, max-age=300",
+            },
+          });
+        }
+      }
+    }
+    // if we didn't reach the return above due to one of the conditionals
+    // being false, we'll fall through to the normal error handling (which
+    // returns plaintext)
+
     switch (err.status) {
       case 400:
         c.header("Cache-Control", "public, max-age=3600");
@@ -346,5 +389,8 @@ app.get("/:name/:z/:x/:y_ext", handleTileRequest);
 app.get("/:name{(.*)\\.json}", handleTilesetRequest);
 
 app.get("/fonts/:fontName/:range_pbf", handleFontRequest);
+
+// Catch-all route for static file serving - must come last
+app.get("*", handleStaticFileRequest);
 
 export default app;
