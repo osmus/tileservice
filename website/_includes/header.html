@@ -1,0 +1,15 @@
+<header>
+  <a class="logo" href="/">
+    <img src="/assets/img/tileservice-logo.svg" alt=""/>
+    <h1>
+      <span>OpenStreetMap US</span>
+      <span>Tileservice</span>
+    </h1>
+  </a>
+  <nav>
+    <a href="/vector/" {% if page.url contains '/vector/' %}class="active"{% endif %}>Vector</a>
+    <a href="/raster/" {% if page.url contains '/raster/' %}class="active"{% endif %}>Raster</a>
+    <a href="/fonts/" {% if page.url == '/fonts/' %}class="active"{% endif %}>Fonts</a>
+    <a href="/usage-policy/" {% if page.url == '/usage-policy/' %}class="active"{% endif %}>Usage Policy</a>
+  </nav>
+</header>

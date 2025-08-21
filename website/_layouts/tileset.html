@@ -1,0 +1,31 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }}</h1>
+
+<link href="/assets/viewer.css" rel="stylesheet" />
+
+<p><code>{{ page.tilejson_url }}</code></p>
+
+<div class="map-wrapper">
+  <div id="map"></div>
+</div>
+
+{{ content }}
+
+<script src="/assets/viewer.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    TilesetViewer.initTilesetViewer({
+      tileJsonUrl: '{{ page.tilejson_url }}',
+      containerId: 'map',
+      {% if page.center %}center: {{ page.center | jsonify }},{% endif %}
+      {% if page.zoom %}zoom: {{ page.zoom }}{% endif %}
+    }).catch(error => {
+      console.error('Failed to initialize tileset viewer:', error);
+      document.getElementById('map').innerHTML = 
+        '<div style="padding: 20px; color: red; text-align: center;">Failed to load tileset viewer</div>';
+    });
+  });
+</script>

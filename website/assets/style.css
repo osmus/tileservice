@@ -1,0 +1,190 @@
+@font-face {
+  font-family: "Patrick Hand";
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/patrick-hand.woff2") format("woff2");
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-text-color: white;
+  --secondary-text-color: #c6e5ff;
+}
+
+body {
+  color: white;
+  margin: 0;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  font-size: clamp(0.875rem, 0.5rem + 1.5vw, 1.125rem);
+  font-family: system-ui, sans-serif;
+  line-height: 1.4;
+}
+
+html {
+  --line-color: #094d88;
+  background-color: #004079;
+  background-image:
+    linear-gradient(90deg, var(--line-color) 1px, transparent 0),
+    linear-gradient(180deg, var(--line-color) 1px, transparent 0),
+    linear-gradient(90deg, var(--line-color) 1px, transparent 0),
+    linear-gradient(180deg, var(--line-color) 1px, transparent 0),
+    linear-gradient(90deg, var(--line-color) 2px, transparent 0),
+    linear-gradient(180deg, var(--line-color) 2px, transparent 0);
+  background-position: 0px 20px;
+  background-repeat: repeat;
+  background-size:
+    50px 50px,
+    50px 50px,
+    25px 25px,
+    25px 25px,
+    100px 100px,
+    100px 100px;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #84bdff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Patrick Hand", sans-serif;
+  line-height: 1.2;
+  text-transform: uppercase;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+header {
+  border-bottom: 2px dashed var(--secondary-text-color);
+  padding: 1rem 0 1rem;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+
+.logo img {
+  height: 3rem;
+  flex-shrink: 0;
+}
+
+.logo h1 {
+  margin: 0;
+}
+
+.logo h1 span:first-child {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--secondary-text-color);
+  font-weight: 400;
+}
+
+.logo h1 span:last-child {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: -0.25rem;
+}
+
+nav {
+  display: flex;
+  gap: 1.5em;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "Patrick Hand";
+  font-size: 1.25em;
+  letter-spacing: 1px;
+}
+
+main {
+  padding: 2rem 0;
+}
+
+main > h1:first-child {
+  margin-top: 0;
+}
+
+footer {
+  border-top: 2px dashed var(--secondary-text-color);
+  padding: 1.25rem 0;
+  color: var(--secondary-text-color);
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Hero layout for homepage */
+.hero {
+  border-bottom: 2px dashed var(--secondary-text-color);
+  padding: 3rem 0 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.hero .logo {
+  text-decoration: none;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.hero .logo img {
+  height: 8rem;
+  flex-shrink: 0;
+}
+
+.hero .logo h1 {
+  margin: 0;
+  text-align: left;
+}
+
+.hero .logo h1 span:first-child {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--secondary-text-color);
+  font-weight: 400;
+}
+
+.hero .logo h1 span:last-child {
+  display: block;
+  font-size: 4rem;
+  font-weight: 700;
+  margin-top: -0.25rem;
+}
+
+@media (max-width: 48rem) {
+  .hero .logo img {
+    height: 4rem;
+  }
+
+  .hero .logo h1 span:first-child {
+    font-size: 1.25rem;
+  }
+
+  .hero .logo h1 span:last-child {
+    font-size: 2.5rem;
+  }
+}

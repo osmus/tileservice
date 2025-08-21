@@ -1,0 +1,127 @@
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
+.map-wrapper {
+  display: flex;
+  gap: 2em;
+  align-items: flex-start;
+  margin: 1em 0;
+  box-sizing: border-box;
+  padding: 0 1em;
+  justify-content: center;
+}
+
+@supports (width: 1cqw) {
+  .map-wrapper {
+    position: relative;
+    width: 100cqw;
+    left: calc(-50cqw + 50%);
+  }
+}
+
+#map {
+  height: 620px;
+  flex: 1;
+  position: relative;
+  max-width: 1200px;
+}
+
+.legend,
+.feature-info {
+  background: rgba(0, 11, 22, 0.95);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend {
+  max-width: 200px;
+}
+
+.legend h6 {
+  font-size: 0.8rem;
+  font-family: monospace;
+  margin: 0 0 0.5em;
+}
+
+.legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+}
+
+.legend label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.legend input[type="checkbox"] {
+  margin: 0 0.5em;
+  flex-shrink: 0;
+}
+
+.feature-info {
+  width: 300px;
+  height: calc(100vh - 120px);
+  max-height: 500px;
+  line-height: 1.25;
+  display: none;
+  overflow-y: auto;
+  z-index: 1000;
+  position: relative;
+}
+
+.feature-info-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-info-close:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+}
+
+.feature-info table {
+  border-spacing: 0;
+}
+
+.feature-info td {
+  padding: 0;
+  vertical-align: top;
+  white-space: pre;
+}
+
+/* hack to make built-in MapLibre controls render in "dark mode" */
+.maplibregl-ctrl:not(.legend-control):not(.feature-info-control) {
+  filter: invert(1) hue-rotate(180deg);
+}

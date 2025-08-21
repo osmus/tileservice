@@ -1,0 +1,25 @@
+title: OpenStreetMap US Tileservice
+
+exclude:
+  - README.md
+  - Makefile
+  - viewer/
+
+collections:
+  pages:
+    output: true
+  tilesets:
+    output: true
+
+defaults:
+  - scope:
+      path: _pages
+      type: pages
+    values:
+      permalink: /:path/
+      layout: page
+  - scope:
+      path: _tilesets
+      type: tilesets
+    values:
+      layout: tileset

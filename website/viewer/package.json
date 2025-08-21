@@ -1,0 +1,15 @@
+{
+  "main": "dist/viewer.js",
+  "scripts": {
+    "build": "esbuild index.js --bundle --outfile=dist/viewer.js --format=iife --global-name=TilesetViewer && esbuild index.css --bundle --outfile=dist/viewer.css",
+    "watch": "npm run build -- --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@turf/turf": "^7.1.0",
+    "maplibre-gl": "^5.6.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
