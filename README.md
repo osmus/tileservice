@@ -1,5 +1,6 @@
-# osmus/tileservice
-This repository contains the source code for the OpenStreetMap US [vector tile service](https://tile.ourmap.us/).
+# OpenStreetMap US Tileservice
+
+This repository contains the source code for the [OpenStreetMap US Tileservice](https://tiles.openstreetmap.us/).
 
 ## Custom server
 
