@@ -6,11 +6,11 @@ This repository contains the source code for the [OpenStreetMap US Tileservice](
 
 This repo contains several loosely related components:
 
-- **`cloudflare/`** - Cloudflare Worker code that serves tile requests at tiles.openstreetmap.us
-- **`renderer/`** - Planetiler configs and other scripts for creating vector tiles from OSM data
-- **`terrain/`** - Scripts for generating hillshade raster tiles and contour vector tiles from DEM data
-- **`website/`** - [tiles.openstreetmap.us](https://tiles.openstreetmap.us/) static website
-- **`static/`** - [tile.ourmap.us](https://tile.ourmap.us/) static website
+- `cloudflare/` - Cloudflare Worker code that serves tile requests at tiles.openstreetmap.us
+- `renderer/` - Planetiler configs and other scripts for creating vector tiles from OSM data
+- `terrain/` - Scripts for generating hillshade raster tiles and contour vector tiles from DEM data
+- `website/` - [tiles.openstreetmap.us](https://tiles.openstreetmap.us/) static website
+- `static/` - [tile.ourmap.us](https://tile.ourmap.us/) static website
 
 ## Quick Start
 
