@@ -208,19 +208,33 @@ async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Resp
 }
 
 async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
-  const fontPath = c.req.path.substring(1); // Remove leading slash
+  // Clients can request a comma-separated list of fonts, which we should
+  // try to retrieve in order.
+  const fontNames = c.req.param("fontName").split(",").filter(Boolean);
+  const range = c.req.param("range_pbf");
 
-  const fontFile = await c.env.BUCKET.get(fontPath);
-  if (!fontFile) {
-    throw new HTTPException(404, { message: "Font file not found" });
+  // Sanity check (mostly to avoid a DOS vector where a client could request hundreds
+  // of nonexistent fonts, each one triggering an R2 read operation)
+  if (fontNames.length > 10) {
+    throw new HTTPException(400, { message: "Too many fonts requested (max 10)" });
   }
 
-  const arrayBuffer = await fontFile.arrayBuffer();
+  for (let fontName of fontNames) {
+    const fontPath = `fonts/${fontName}/${range}`;
+    const fontFile = await c.env.BUCKET.get(fontPath);
+    if (!fontFile) {
+      continue;
+    }
+    const arrayBuffer = await fontFile.arrayBuffer();
 
-  c.header("Cache-Control", "public, max-age=604800"); // 7 days (fonts don't change often)
-  c.header("Content-Type", "application/octet-stream");
+    c.header("Cache-Control", "public, max-age=604800"); // 7 days (fonts don't change often)
+    c.header("Content-Type", "application/octet-stream");
 
-  return c.body(arrayBuffer);
+    return c.body(arrayBuffer);
+  }
+
+  // If we get here, then none of the specified font files were found
+  throw new HTTPException(404, { message: "Font file(s) not found" });
 }
 
 async function handleStaticFileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
