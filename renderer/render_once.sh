@@ -23,12 +23,14 @@ pyosmium-up-to-date -vvvv --size 10000 "$WORKING_DIR/data/sources/planet.osm.pbf
 docker system prune --force
 
 # Pull planetiler docker container.  Temporarily pin to v0.9.2 to avoid bug
-docker pull ghcr.io/onthegomap/planetiler:0.9.2
+PLANETILER_IMAGE=ghcr.io/onthegomap/planetiler:0.9.2
+docker pull $PLANETILER_IMAGE
 
 docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
-	ghcr.io/onthegomap/planetiler:latest --area=planet \
+	$PLANETILER_IMAGE \
+	--area=planet \
 	--download --download-only --only-fetch-wikidata --wikidata-max-age=P30D --wikidata-update-limit=100000
 
 # Remove default downloaded OSM file
@@ -39,7 +41,8 @@ PLANET="$WORKING_DIR/data/planet.pmtiles"
 docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 	-v "$WORKING_DIR/data":/data \
 	-v "$DIR/layers":/layers \
-	ghcr.io/onthegomap/planetiler:latest --area=planet --bounds=world \
+	$PLANETILER_IMAGE \
+	--area=planet --bounds=world \
 	--output="/data/planet.pmtiles" \
 	--force \
 	--transportation_name_size_for_shield \
@@ -74,7 +77,8 @@ for file in "$DIR/layers/"*.yml; do
 	docker run -e JAVA_TOOL_OPTIONS='-Xmx150g' \
 		-v "$WORKING_DIR/data":/data \
 		-v "$DIR/layers":/layers \
-		ghcr.io/onthegomap/planetiler:latest generate-custom \
+		$PLANETILER_IMAGE \
+		generate-custom \
 		--area=planet --bounds=world \
 		--output="/data/$layer_name.pmtiles" \
 		--force \
