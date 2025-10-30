@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy --keep-vars",
+    "build": "wrangler deploy --outdir dist --dry-run",
+    "types": "wrangler types",
+    "typecheck": "tsc",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "check": "biome check"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.34.0"
+  }
+}

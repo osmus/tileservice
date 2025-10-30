@@ -1,0 +1,5 @@
+name = "tileservice-logger"
+main = "src/index.ts"
+compatibility_date = "2025-09-24"
+minify = false
+workers_dev = false
