@@ -2,6 +2,7 @@ This is the code for the [Cloudflare Worker](https://developers.cloudflare.com/w
 
 The worker code is adapted from [example code in from the PMTiles project](https://github.com/protomaps/PMTiles/tree/main/serverless/cloudflare). See the LICENSE file for details.
 
-## Deploying
-
-To deploy this code, run `npm run deploy`. This uses Cloudflare's "Wrangler" CLI tool to build and upload the code. You can also use the Wrangler CLI to test the worker locally.
+Useful commands:
+- `npm run start` - start a local development server
+- `npm run typecheck` and `npm run check` - run tsc and biome (respectively) for typechecking and lint/format checking
+- `npm run deploy` - deploy to Cloudflare (you shouldn't need this as the worker auto-redeploys when changes are made to the main branch on Github)
