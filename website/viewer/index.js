@@ -587,7 +587,8 @@ export async function initTilesetViewer(config) {
     zoom: initialZoom,
     dragRotate: false,
     pitchWithRotate: false,
-    touchZoomRotate: false
+    touchZoomRotate: false,
+    hash: "map"
   });
 
   map.addControl(new ZoomControl(), "bottom-left");
