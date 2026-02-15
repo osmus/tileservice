@@ -22,8 +22,8 @@ pyosmium-up-to-date -vvvv --size 10000 "$WORKING_DIR/data/sources/planet.osm.pbf
 # Remove excess docker files from past runs
 docker system prune --force
 
-# Pull planetiler docker container.  Temporarily pin to v0.9.2 to avoid bug
-PLANETILER_IMAGE=ghcr.io/onthegomap/planetiler:0.9.2
+# Pull planetiler docker container
+PLANETILER_IMAGE=ghcr.io/onthegomap/planetiler:0.10.0
 docker pull $PLANETILER_IMAGE
 
 docker run -e JAVA_TOOL_OPTIONS='-Xmx2g' \
