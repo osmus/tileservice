@@ -121,7 +121,7 @@
   white-space: pre;
 }
 
-.feature-info [title] {
+.feature-info span[title] {
   text-decoration: underline;
   text-decoration-style: dashed;
 }
