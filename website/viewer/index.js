@@ -268,11 +268,16 @@ function setupHoverInteraction(map, vectorLayers, sourceId, containerId) {
     if (rawId === undefined || rawId === null) return "No ID";
     
     const lastDigit = rawId % 10;
+
+    if (lastDigit === 0) {
+      return `${rawId} (<span title="this feature represents several OSM elements that have been merged together">composite</span>)`
+    }
+
     const osmId = Math.floor(rawId / 10);
     const typeMap = { 1: "node", 2: "way", 3: "relation" };
-    const osmType = typeMap[lastDigit] || "unknown";
+    const osmType = typeMap[lastDigit];
     
-    return osmType !== "unknown" 
+    return osmType !== undefined
       ? `<a href="https://www.openstreetmap.org/${osmType}/${osmId}" target="_blank" style="color: #74c7ec; text-decoration: none;">${osmType}/${osmId}</a>`
       : `${rawId} (unknown type)`;
   }

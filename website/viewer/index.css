@@ -121,6 +121,11 @@
   white-space: pre;
 }
 
+.feature-info [title] {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
 /* hack to make built-in MapLibre controls render in "dark mode" */
 .maplibregl-ctrl:not(.legend-control):not(.feature-info-control) {
   filter: invert(1) hue-rotate(180deg);
