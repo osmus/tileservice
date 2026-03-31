@@ -7,6 +7,8 @@ This repository contains the source code for the [OpenStreetMap US Tileservice](
 This repo contains several loosely related components:
 
 - `cloudflare/` - Cloudflare Worker code that serves tile requests at tiles.openstreetmap.us
+- `feeds/` - CF Worker that maintains per-tileset Atom feeds, triggered by R2 upload events
+- `logger/` - CF Tail Worker to send logs from the tile serving worker to a Loki log aggregation server
 - `renderer/` - Planetiler configs and other scripts for creating vector tiles from OSM data
 - `terrain/` - Scripts for generating hillshade raster tiles and contour vector tiles from DEM data
 - `website/` - [tiles.openstreetmap.us](https://tiles.openstreetmap.us/) static website
