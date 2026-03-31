@@ -197,7 +197,7 @@ function makeEntry(data: EntryData): unknown[] {
       entry: [
         { title: [{ "#text": `${name} updated` }] },
         {
-          ":@": { "@_href": `https://${data.hostname}/${data.key}`, "@_rel": "alternate" },
+          ":@": { "@_href": `https://${data.hostname}/${data.key.replace(/\.pmtiles$/, "/")}`, "@_rel": "alternate" },
           link: [],
         },
         { id: [{ "#text": `${tilesetUrn(data.key)}:${data.timestamp}` }] },
