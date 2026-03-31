@@ -239,7 +239,7 @@ async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Respons
 
 async function handleFeedRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
   const subdirectory = c.req.param("subdirectory");
-  const name = c.req.param("name");
+  const name = c.req.param("name").split(".")[0];
   const key = `${subdirectory}/${name}.atom.xml`;
 
   const file = await c.env.BUCKET.get(key);
