@@ -1,0 +1,24 @@
+{
+  "name": "tileservice-feeds",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "wrangler deploy --outdir dist --dry-run",
+    "types": "wrangler types",
+    "typecheck": "tsc",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "check": "biome check"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.5.6",
+    "pmtiles": "^4.3.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.13",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.61.1"
+  }
+}

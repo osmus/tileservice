@@ -237,6 +237,22 @@ async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   throw new HTTPException(404, { message: "Font file(s) not found" });
 }
 
+async function handleFeedRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+  const subdirectory = c.req.param("subdirectory");
+  const name = c.req.param("name");
+  const key = `${subdirectory}/${name}.atom.xml`;
+
+  const file = await c.env.BUCKET.get(key);
+  if (!file) {
+    throw new HTTPException(404, { message: "Feed not found" });
+  }
+
+  c.header("Cache-Control", "public, max-age=3600");
+  c.header("Content-Type", "application/atom+xml");
+
+  return c.body(await file.arrayBuffer());
+}
+
 async function handleStaticFileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
   let path = c.req.path;
   if (!path.startsWith("/")) path = `/${path}`;
@@ -403,6 +419,8 @@ app.get("/:name/:z/:x/:y_ext", handleTileRequest);
 app.get("/:name{(.*)\\.json}", handleTilesetRequest);
 
 app.get("/fonts/:fontName/:range_pbf", handleFontRequest);
+
+app.get("/:subdirectory{(vector|raster)}/:name{(.*)\\.atom\\.xml}", handleFeedRequest);
 
 // Catch-all route for static file serving - must come last
 app.get("*", handleStaticFileRequest);

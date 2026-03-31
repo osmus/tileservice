@@ -1,0 +1,16 @@
+name = "tileservice-feeds"
+main = "src/index.ts"
+compatibility_date = "2024-09-02"
+minify = false
+
+r2_buckets = [
+  { binding = "BUCKET", bucket_name = "osmus-tile", preview_bucket_name = "osmus-tile" },
+]
+
+[[queues.consumers]]
+queue = "pmtiles-upload-notifications"
+max_batch_size = 10
+max_batch_timeout = 30
+
+[vars]
+PUBLIC_HOSTNAME = "tiles.openstreetmap.us"
