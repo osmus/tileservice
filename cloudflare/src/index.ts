@@ -10,6 +10,7 @@ import {
   type Source,
   TileType,
 } from "pmtiles";
+import type { JSONObject } from "hono/utils/types";
 
 interface Env {
   ALLOWED_ORIGINS?: string;
@@ -195,10 +196,19 @@ async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Resp
     const baseUrl = subdirectory
       ? `https://${url.hostname}/${subdirectory}/${name}`
       : `https://${url.hostname}/${name}`;
-    const tilejson = await pmtiles.getTileJson(baseUrl);
+
+    const tilejson = (await pmtiles.getTileJson(baseUrl)) as JSONObject;
+    const metadata = (await pmtiles.getMetadata()) as Record<string, string>;
+
+    if (metadata["planetiler:version"] !== undefined) {
+      tilejson.generator = `planetiler v${metadata["planetiler:version"]}`;
+    }
+    if (metadata["planetiler:osm:osmosisreplicationtime"] !== undefined) {
+      tilejson.timestamp = metadata["planetiler:osm:osmosisreplicationtime"];
+    }
+
     c.header("Cache-Control", "public, max-age=86400");
-    // biome-ignore lint/suspicious/noExplicitAny: tilejson is a JSONValue, but that type is recursive and tsc can't deal with it in this context
-    return c.json(tilejson as any);
+    return c.json(tilejson);
   } catch (e) {
     if (e instanceof KeyNotFoundError) {
       throw new HTTPException(404, { message: "Archive not found" });
@@ -219,7 +229,7 @@ async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Respons
     throw new HTTPException(400, { message: "Too many fonts requested (max 10)" });
   }
 
-  for (let fontName of fontNames) {
+  for (const fontName of fontNames) {
     const fontPath = `fonts/${fontName}/${range}`;
     const fontFile = await c.env.BUCKET.get(fontPath);
     if (!fontFile) {
