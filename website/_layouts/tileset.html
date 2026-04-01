@@ -8,6 +8,12 @@ layout: default
 
 <p><code>{{ page.tilejson_url }}</code></p>
 
+{% assign atom_feed_path = page.tilejson_url | replace: 'https://tiles.openstreetmap.us', '' | replace: '.json', '.atom.xml' %}
+<p>
+  Last updated: <span id="tilejson-timestamp"><em>loading&hellip;</em></span>
+  (<a href="{{ atom_feed_path }}">Atom feed</a>)
+</p>
+
 <div class="map-wrapper">
   <div id="map"></div>
 </div>
@@ -16,16 +22,26 @@ layout: default
 
 <script src="/assets/viewer.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    TilesetViewer.initTilesetViewer({
-      tileJsonUrl: '{{ page.tilejson_url }}',
-      containerId: 'map',
-      {% if page.center %}center: {{ page.center | jsonify }},{% endif %}
-      {% if page.zoom %}zoom: {{ page.zoom }}{% endif %}
-    }).catch(error => {
+  document.addEventListener('DOMContentLoaded', async function() {
+    try {
+      const tilejson = await fetch('{{ page.tilejson_url }}').then(r => r.json());
+      const el = document.getElementById('tilejson-timestamp');
+      el.textContent = tilejson.timestamp ?? 'unknown';
+    } catch {
+      document.getElementById('tilejson-timestamp').textContent = 'unavailable';
+    }
+
+    try {
+      await TilesetViewer.initTilesetViewer({
+        tileJsonUrl: '{{ page.tilejson_url }}',
+        containerId: 'map',
+        {% if page.center %}center: {{ page.center | jsonify }},{% endif %}
+        {% if page.zoom %}zoom: {{ page.zoom }}{% endif %}
+      });
+    } catch (error) {
       console.error('Failed to initialize tileset viewer:', error);
-      document.getElementById('map').innerHTML = 
+      document.getElementById('map').innerHTML =
         '<div style="padding: 20px; color: red; text-align: center;">Failed to load tileset viewer</div>';
-    });
+    }
   });
 </script>
