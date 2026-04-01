@@ -247,7 +247,7 @@ async function handleFeedRequest(c: Context<{ Bindings: Env }>): Promise<Respons
     throw new HTTPException(404, { message: "Feed not found" });
   }
 
-  c.header("Cache-Control", "public, max-age=3600");
+  c.header("Cache-Control", "public, max-age=300");
   c.header("Content-Type", "application/atom+xml");
 
   return c.body(await file.arrayBuffer());
