@@ -188,3 +188,8 @@ footer p {
     font-size: 2.5rem;
   }
 }
+
+time[title] {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}

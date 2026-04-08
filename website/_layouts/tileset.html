@@ -10,7 +10,7 @@ layout: default
 
 {% assign atom_feed_path = page.tilejson_url | replace: 'https://tiles.openstreetmap.us', '' | replace: '.json', '.atom.xml' %}
 <p>
-  Last updated: <span id="tilejson-timestamp"><em>loading&hellip;</em></span>
+  Last updated: <time id="tilejson-timestamp"><em>loading&hellip;</em></time>
   (<a href="{{ atom_feed_path }}">Atom feed</a>)
 </p>
 
@@ -26,7 +26,28 @@ layout: default
     try {
       const tilejson = await fetch('{{ page.tilejson_url }}').then(r => r.json());
       const el = document.getElementById('tilejson-timestamp');
-      el.textContent = tilejson.timestamp ?? 'unknown';
+      if (tilejson.timestamp) {
+        const date = new Date(tilejson.timestamp);
+        const seconds = (date - Date.now()) / 1000;
+        const thresholds = [
+          [60, 'second'],
+          [3600, 'minute'],
+          [86400, 'hour'],
+          [Infinity, 'day'],
+        ];
+        let value = seconds;
+        let unit = 'second';
+        for (const [limit, u] of thresholds) {
+          if (Math.abs(seconds) < limit) { unit = u; break; }
+          value = seconds / limit;
+        }
+        const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+        el.textContent = rtf.format(Math.round(value), unit);
+        el.dateTime = date.toISOString();
+        el.title = date.toLocaleString();
+      } else {
+        el.textContent = 'unknown';
+      }
     } catch {
       document.getElementById('tilejson-timestamp').textContent = 'unavailable';
     }
