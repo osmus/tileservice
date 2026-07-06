@@ -97,7 +97,9 @@ class R2Source implements Source {
   }
 }
 
-async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+async function handleTileRequest(
+  c: Context<{ Bindings: Env }, "/:name/:z/:x/:y_ext">,
+): Promise<Response> {
   const subdirectory = c.req.param("subdirectory"); // "vector" or "raster" or undefined
   const name = c.req.param("name");
   const z = Number.parseInt(c.req.param("z"), 10);
@@ -180,7 +182,7 @@ async function handleTileRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   }
 }
 
-async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+async function handleTilesetRequest(c: Context<{ Bindings: Env }, "/:name">): Promise<Response> {
   const url = new URL(c.req.url);
   const subdirectory = c.req.param("subdirectory"); // "vector" or "raster" or undefined
   const name = c.req.param("name").split(".")[0];
@@ -217,7 +219,9 @@ async function handleTilesetRequest(c: Context<{ Bindings: Env }>): Promise<Resp
   }
 }
 
-async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+async function handleFontRequest(
+  c: Context<{ Bindings: Env }, "/fonts/:fontName/:range_pbf">,
+): Promise<Response> {
   // Clients can request a comma-separated list of fonts, which we should
   // try to retrieve in order.
   const fontNames = c.req.param("fontName").split(",").filter(Boolean);
@@ -247,7 +251,7 @@ async function handleFontRequest(c: Context<{ Bindings: Env }>): Promise<Respons
   throw new HTTPException(404, { message: "Font file(s) not found" });
 }
 
-async function handleFeedRequest(c: Context<{ Bindings: Env }>): Promise<Response> {
+async function handleFeedRequest(c: Context<{ Bindings: Env }, "/:name">): Promise<Response> {
   const subdirectory = c.req.param("subdirectory");
   const name = c.req.param("name").split(".")[0];
   const key = `${subdirectory}/${name}.atom.xml`;
