@@ -16,7 +16,7 @@
     "pmtiles": "^4.4.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
+    "@biomejs/biome": "^2.5.6",
     "@cloudflare/workers-types": "^4.20260207.0",
     "typescript": "^5.9.3",
     "wrangler": "^4.69.0"
