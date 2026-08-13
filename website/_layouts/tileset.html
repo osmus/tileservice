@@ -10,6 +10,7 @@ layout: default
 
 {% assign atom_feed_path = page.tilejson_url | replace: 'https://tiles.openstreetmap.us', '' | replace: '.json', '.atom.xml' %}
 <p>
+  <span id="tilejson-version" hidden>Schema version: <span id="tilejson-version-slot"></span> &middot; </span>
   Last updated: <time id="tilejson-timestamp"><em>loading&hellip;</em></time>
   (<a href="{{ atom_feed_path }}">Atom feed</a>)
 </p>
@@ -25,6 +26,12 @@ layout: default
   document.addEventListener('DOMContentLoaded', async function() {
     try {
       const tilejson = await fetch('{{ page.tilejson_url }}').then(r => r.json());
+
+      if (tilejson.version) {
+        document.getElementById('tilejson-version-slot').textContent = tilejson.version;
+        document.getElementById('tilejson-version').hidden = false;
+      }
+
       const el = document.getElementById('tilejson-timestamp');
       if (tilejson.timestamp) {
         const date = new Date(tilejson.timestamp);
