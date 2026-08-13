@@ -11,7 +11,7 @@ layers:
     features:
       - source: osm
         geometry: line
-        min_zoom: 5
+        min_zoom: 10
         min_size: 1
         include_when: &trails_filter
           # gather any roads, paths, or ferries that are explicitly marked as trails or portages
@@ -109,26 +109,8 @@ layers:
               # exclude paths that go along roads
               - is_sidepath: yes
         attributes: &trail_attributes
-          - key: OSM_ID
-            value: ${feature.id}
-          - key: OSM_TYPE
-            value: ${feature.osm_type}
-          - key: OSM_VERSION
-            value: ${feature.osm_version}
           - key: OSM_TIMESTAMP
             value: ${feature.osm_timestamp}
-          - key: OSM_CHANGESET
-            value: ${feature.osm_changeset}
-          - key: OSM_USER_NAME
-            value: ${feature.osm_user_name}
-          - key: MIN_LAT
-            value: ${feature.min_lat}
-          - key: MIN_LON
-            value: ${feature.min_lon}
-          - key: MAX_LAT
-            value: ${feature.max_lat}
-          - key: MAX_LON
-            value: ${feature.max_lon}
           - key: access
             tag_value: access
           - key: atv
@@ -335,27 +317,12 @@ layers:
             tag_value: wheelchair
           - key: width
             tag_value: width
-  - id: trail_centerpoint
-    features:
-      # gather trail issues as points so we can render markers for them at any zoom level
-      - source: osm
-        geometry: line_midpoint
-        min_zoom: 7
-        include_when:
-          - __all__:
-            - __any__: *trails_filter
-            - __any__:
-              - fixme: __any__
-              - FIXME: __any__
-              - todo: __any__
-              - TODO: __any__
-        attributes: *trail_attributes
   - id: trail_poi
     features:
       # gather POIs mapped as nodes
       - source: osm
         geometry: point
-        min_zoom: 7
+        min_zoom: 10
         include_when:
           amenity: ranger_station
           highway: trailhead
@@ -367,20 +334,8 @@ layers:
             - viewpoint
           shelter_type: lean_to
         attributes: &poi_attributes
-          - key: OSM_ID
-            value: ${feature.id}
-          - key: OSM_TYPE
-            value: ${feature.osm_type}
-          - key: OSM_VERSION
-            value: ${feature.osm_version}
           - key: OSM_TIMESTAMP
             value: ${feature.osm_timestamp}
-          - key: OSM_CHANGESET
-            value: ${feature.osm_changeset}
-          - key: OSM_USER_NAME
-            value: ${feature.osm_user_name}
-          - key: AREA_Z0_PX2
-            value: ${feature.area('z0 px2')}
           - key: access
             tag_value: access
           - key: amenity
@@ -514,7 +469,7 @@ layers:
       # gather POIs mapped as areas for certain types
       - source: osm
         geometry: polygon_centroid_if_convex
-        min_zoom: 7
+        min_zoom: 10
         include_when:
           amenity: ranger_station
           tourism:
@@ -537,7 +492,7 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: point
-        min_zoom: 7
+        min_zoom: 10
         include_when:
           - leisure: slipway
           - waterway: access_point
@@ -557,7 +512,7 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: point
-        min_zoom: 7
+        min_zoom: 10
         include_when: &waterway_barriers_filter
           natural: beaver_dam
           waterway:
@@ -567,17 +522,17 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: line_midpoint
-        min_zoom: 7
+        min_zoom: 10
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: polygon_centroid_if_convex
-        min_zoom: 7
+        min_zoom: 10
         include_when: *waterway_barriers_filter
         attributes: *poi_attributes
       - source: osm
         geometry: line_midpoint
-        min_zoom: 7
+        min_zoom: 10
         include_when:
           - __all__:
             - lock: yes
@@ -588,116 +543,12 @@ layers:
         attributes: *poi_attributes
       - source: osm
         geometry: line_midpoint
-        min_zoom: 7
+        min_zoom: 10
         include_when:
           - __all__:
             - route: ferry
             - __any__: *trails_filter
         attributes: *poi_attributes
-      # gather protected areas as points
-      - source: osm
-        geometry: polygon_centroid_if_convex
-        min_zoom: 4
-        min_size: 5
-        include_when: &parks_filter
-          - __all__:
-            - name: __any__
-            - __any__:
-              - leisure:
-                - park
-                - nature_reserve
-              - boundary:
-                - national_park
-                - protected_area
-            - __not__:
-              - protected_area: historic_district
-        attributes: *poi_attributes
-      # gather trees at low zooms
-      - source: osm
-        geometry: point
-        min_zoom: 14
-        include_when:
-          natural: tree
-        attributes: *poi_attributes
-  # gather protected areas as polygons on separate layer
-  - id: park
-    features:
-      - source: osm
-        geometry: polygon
-        min_zoom: 4
-        min_size: 1
-        include_when: *parks_filter
-        attributes:
-          - key: OSM_ID
-            value: ${feature.id}
-          - key: OSM_TYPE
-            value: ${feature.osm_type}
-          - key: MIN_LAT
-            value: ${feature.min_lat}
-          - key: MIN_LON
-            value: ${feature.min_lon}
-          - key: MAX_LAT
-            value: ${feature.max_lat}
-          - key: MAX_LON
-            value: ${feature.max_lon}
-          - key: access
-            tag_value: access
-          - key: boundary
-            tag_value: boundary
-          - key: name
-            tag_value: name
-          - key: protected_area
-            tag_value: protected_area
-  # gather barriers as areas for rendering
-  - id: barrier_area
-    features:
-      - source: osm
-        geometry: polygon
-        min_zoom: 7
-        min_size: 1
-        include_when: &barrier_filter
-          - barrier: floating_boom
-          - man_made: breakwater
-          - natural: beaver_dam
-          - waterway:
-            - dam
-            - weir
-        attributes: &barrier_attributes
-          - key: OSM_ID
-            value: ${feature.id}
-          - key: OSM_TYPE
-            value: ${feature.osm_type}
-          - key: OSM_VERSION
-            value: ${feature.osm_version}
-          - key: OSM_TIMESTAMP
-            value: ${feature.osm_timestamp}
-          - key: OSM_CHANGESET
-            value: ${feature.osm_changeset}
-          - key: OSM_USER_NAME
-            value: ${feature.osm_user_name}
-          - key: barrier
-            tag_value: barrier
-          - key: canoe
-            tag_value: canoe
-          - key: intermittent
-            tag_value: intermittent
-          - key: man_made
-            tag_value: man_made
-          - key: portage
-            tag_value: portage
-          - key: natural
-            tag_value: natural
-          - key: waterway
-            tag_value: waterway
-  # gather barriers as lines for rendering
-  - id: barrier_line
-    features:
-      - source: osm
-        geometry: line
-        min_zoom: 7
-        min_size: 1
-        include_when: *barrier_filter
-        attributes: *barrier_attributes
 args:
   area:
     description: Geofabrik area to download
