@@ -12,7 +12,7 @@
     "check": "biome check"
   },
   "dependencies": {
-    "hono": "^4.12.25",
+    "hono": "^4.12.32",
     "pmtiles": "^4.4.1"
   },
   "devDependencies": {
